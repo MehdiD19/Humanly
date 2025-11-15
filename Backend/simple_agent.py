@@ -73,6 +73,9 @@ escalate_to_human function. This includes:
         self.escalations: List[Dict[str, Any]] = []
         self.pending_escalations: Dict[str, str] = {}  # escalation_id -> escalation_id
         self.escalation_websockets: Dict[str, websockets.WebSocketClientProtocol] = {}
+        self.escalation_context: Dict[str, Dict[str, Any]] = {}  # escalation_id -> context
+        self.waiting_for_response: Dict[str, bool] = {}  # escalation_id -> waiting state
+        self.filler_tasks: Dict[str, asyncio.Task] = {}  # escalation_id -> filler task
     
     async def on_enter(self):
         """Called when the agent enters the room."""
@@ -234,10 +237,19 @@ escalate_to_human function. This includes:
             escalation["escalation_id"] = escalation_id
             self.pending_escalations[escalation_id] = escalation_id
             
+            # Store escalation context for filler generation
+            self.escalation_context[escalation_id] = {
+                "reason": reason,
+                "context_details": context_details,
+                "decision_type": decision_type.lower(),
+                "recent_transcript": escalation["recent_transcript"],
+                "urgency": urgency.lower()
+            }
+            
             # Connect to WebSocket to receive response
             asyncio.create_task(self._connect_escalation_websocket(escalation_id))
         
-        return f"I've flagged this for human assistance. This has been recorded as a {urgency} priority {decision_type} escalation. I'm waiting for guidance from a human operator."
+        return "I'm going to call it. Let me check with my team about this."
     
     async def _send_escalation_to_api(self, reason: str, urgency: str, decision_type: str, 
                                       context_details: str, recent_transcript: List[Dict]) -> Optional[str]:
@@ -270,10 +282,19 @@ escalate_to_human function. This includes:
         ws_url = API_BASE_URL.replace("http://", "ws://").replace("https://", "wss://")
         ws_path = f"/ws/agent/{escalation_id}"
         
+        # Set waiting state
+        self.waiting_for_response[escalation_id] = True
+        
         try:
             async with websockets.connect(f"{ws_url}{ws_path}") as websocket:
                 self.escalation_websockets[escalation_id] = websocket
                 logger.info(f"🔌 Connected to WebSocket for escalation {escalation_id}")
+                
+                # Start filler generation task
+                filler_task = asyncio.create_task(
+                    self._generate_filler_content(escalation_id)
+                )
+                self.filler_tasks[escalation_id] = filler_task
                 
                 # Listen for responses
                 async for message in websocket:
@@ -285,6 +306,10 @@ escalate_to_human function. This includes:
                             
                             if response_text and escalation_id_received == escalation_id:
                                 logger.info(f"📨 Received human response for {escalation_id}")
+                                # Stop waiting and cancel filler task
+                                self.waiting_for_response[escalation_id] = False
+                                if escalation_id in self.filler_tasks:
+                                    self.filler_tasks[escalation_id].cancel()
                                 await self._inject_human_response(response_text, escalation_id)
                                 break  # Close connection after receiving response
                     except json.JSONDecodeError:
@@ -295,8 +320,65 @@ escalate_to_human function. This includes:
         except Exception as e:
             logger.error(f"❌ WebSocket error for escalation {escalation_id}: {e}")
         finally:
+            # Clean up
+            self.waiting_for_response.pop(escalation_id, None)
             self.escalation_websockets.pop(escalation_id, None)
             self.pending_escalations.pop(escalation_id, None)
+            self.escalation_context.pop(escalation_id, None)
+            if escalation_id in self.filler_tasks:
+                self.filler_tasks.pop(escalation_id, None)
+    
+    async def _generate_filler_content(self, escalation_id: str):
+        """Generate filler content while waiting for human response."""
+        if not self.session:
+            logger.error("Cannot generate filler: session not available")
+            return
+        
+        # Wait a moment before starting filler (let the announcement finish)
+        await asyncio.sleep(1)
+        
+        # Check if we're still waiting
+        if not self.waiting_for_response.get(escalation_id):
+            return
+        
+        # Get escalation context
+        context = self.escalation_context.get(escalation_id, {})
+        reason = context.get("reason", "")
+        context_details = context.get("context_details", "")
+        decision_type = context.get("decision_type", "")
+        
+        # Build context string for filler generation
+        context_str = f"The question or situation is: {reason}"
+        if context_details:
+            context_str += f" Additional context: {context_details}"
+        
+        # Get recent conversation for context
+        recent_messages = context.get("recent_transcript", [])
+        recent_context = ""
+        if recent_messages:
+            recent_context = "Recent conversation: " + " ".join([
+                f"{msg.get('role', 'user')}: {msg.get('content', '')[:100]}"
+                for msg in recent_messages[-3:]  # Last 3 messages
+            ])
+        
+        try:
+            # Generate filler content
+            filler_instructions = f"""You're discussing a {decision_type} situation with the user. {context_str}
+
+{recent_context}
+
+While waiting for guidance, talk naturally about this question or situation. Discuss the implications, what factors might be important, or share relevant thoughts. Be conversational, engaging, and thoughtful. Don't mention that you're waiting for someone - just discuss the topic naturally as if you're thinking through it together.
+
+Keep it natural and conversational. You might say things like "Well, that's a very good proposition" or "I think in this case..." or "Imagine if we consider..." - just fill time naturally while discussing the topic."""
+            
+            logger.info(f"💬 Generating filler content for escalation {escalation_id}")
+            await self.session.generate_reply(instructions=filler_instructions)
+            
+        except asyncio.CancelledError:
+            logger.info(f"🛑 Filler generation cancelled for escalation {escalation_id}")
+            raise
+        except Exception as e:
+            logger.error(f"❌ Failed to generate filler content: {e}")
     
     async def _inject_human_response(self, response_text: str, escalation_id: str):
         """Inject human response into the conversation."""
@@ -304,14 +386,28 @@ escalate_to_human function. This includes:
             logger.error("Cannot inject response: session not available")
             return
         
+        # Ensure waiting flag is cleared
+        self.waiting_for_response[escalation_id] = False
+        
+        # Log the response we received
+        logger.info(f"📥 Human response content: {response_text}")
+        
         try:
             # Use generate_reply to naturally incorporate the human guidance
             await self.session.generate_reply(
-                instructions=f"""A human operator has provided guidance regarding the escalation. 
+                instructions=f"""A human operator has provided important guidance. 
+
 The guidance is: "{response_text}"
 
-Incorporate this guidance naturally into your response to the user. Be conversational and helpful. 
-Don't mention that you received guidance from an operator - just use the information naturally."""
+Your response should:
+1. Acknowledge the guidance from the human
+2. Incorporate their decision/information naturally
+3. Communicate the outcome clearly to the user
+4. Be conversational and helpful
+
+Example transitions: "Based on feedback I received...", "Well, after checking...", "So I've been advised that...", "The answer is..."
+
+DO NOT say you got guidance from an operator. Just naturally use the information."""
             )
             logger.info(f"✅ Injected human response into conversation")
         except Exception as e:
@@ -324,12 +420,25 @@ Don't mention that you received guidance from an operator - just use the informa
     
     async def _close_all_websockets(self):
         """Close all WebSocket connections."""
+        # Cancel all filler tasks
+        for escalation_id, task in list(self.filler_tasks.items()):
+            try:
+                task.cancel()
+            except Exception as e:
+                logger.error(f"Error cancelling filler task for {escalation_id}: {e}")
+        self.filler_tasks.clear()
+        
+        # Close all WebSocket connections
         for escalation_id, ws in list(self.escalation_websockets.items()):
             try:
                 await ws.close()
             except Exception as e:
                 logger.error(f"Error closing WebSocket for {escalation_id}: {e}")
         self.escalation_websockets.clear()
+        
+        # Clear all state
+        self.waiting_for_response.clear()
+        self.escalation_context.clear()
     
     def _save_escalation_to_file(self, escalation: Dict[str, Any]):
         """Save escalation to a JSON file for review."""

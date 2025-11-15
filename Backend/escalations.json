@@ -203,5 +203,285 @@
         "content": "There's not."
       }
     ]
+  },
+  {
+    "timestamp": "2025-11-15T17:23:30.504406",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is making a financial offer and asking for a preference between money and equity.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user is offering either fifteen thousand dollars or twenty five percent equity.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T17:23:02.969015",
+        "role": "assistant",
+        "content": "Hello there! How are you doing today?"
+      },
+      {
+        "timestamp": "2025-11-15T17:23:11.896491",
+        "role": "user",
+        "content": "Hey, mate. I'm doing pretty good. And you?"
+      },
+      {
+        "timestamp": "2025-11-15T17:23:18.893198",
+        "role": "assistant",
+        "content": "I'm doing well, thank you! It's always a pleasure to chat with you. Is there anything I can help you with today?"
+      },
+      {
+        "timestamp": "2025-11-15T17:23:23.023907",
+        "role": "user",
+        "content": "I have a proposition for you."
+      },
+      {
+        "timestamp": "2025-11-15T17:23:29.526023",
+        "role": "user",
+        "content": "I'm proposing you fifteen thousand dollar or twenty five percent equity. What do you prefer?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T17:24:25.039206",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is making a financial offer and asking for a preference between money and equity.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user is re-iterating a financial offer and asking for a preference between money and equity.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T17:23:39.199364",
+        "role": "assistant",
+        "content": "That's a very interesting proposition. I'm going to call it. Let me check with my team about this."
+      },
+      {
+        "timestamp": "2025-11-15T17:24:20.930198",
+        "role": "assistant",
+        "content": "That's a very interesting proposition, and I appreciate you offering it. When considering whether to prefer a cash offer or an equity stake, there are a few things that immediately come to mind.\n\nWith fifteen thousand dollars, there's a certainty and immediate value. It's a clear amount that can be used right away.\n\nOn the other hand, twenty-five percent equity could potentially be worth much more than fifteen thousand dollars in the long run, especially if the company grows and becomes very successful. However, there's also the inherent risk that the company might not perform as well as hoped, and the equity's value could be less or even nothing.\n\nIt really depends"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:22.143309",
+        "role": "assistant",
+        "content": "Well,"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:22.288120",
+        "role": "user",
+        "content": "Okay. So, basically,"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:24.050560",
+        "role": "user",
+        "content": "what do you prefer now?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T17:24:40.227812",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is making a financial offer and asking for a preference between money and equity.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user is re-iterating a financial offer and asking for a preference between money and equity.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T17:24:20.930198",
+        "role": "assistant",
+        "content": "That's a very interesting proposition, and I appreciate you offering it. When considering whether to prefer a cash offer or an equity stake, there are a few things that immediately come to mind.\n\nWith fifteen thousand dollars, there's a certainty and immediate value. It's a clear amount that can be used right away.\n\nOn the other hand, twenty-five percent equity could potentially be worth much more than fifteen thousand dollars in the long run, especially if the company grows and becomes very successful. However, there's also the inherent risk that the company might not perform as well as hoped, and the equity's value could be less or even nothing.\n\nIt really depends"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:22.143309",
+        "role": "assistant",
+        "content": "Well,"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:22.288120",
+        "role": "user",
+        "content": "Okay. So, basically,"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:24.050560",
+        "role": "user",
+        "content": "what do you prefer now?"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:40.186354",
+        "role": "assistant",
+        "content": "I appreciate you asking again. As an AI, I'm not able to make financial decisions or accept offers like this directly. My purpose is to assist you with information and complete tasks, but"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T17:24:48.037706",
+    "user_id": "test_user_24c7655c",
+    "reason": "I am an AI and cannot 'receive' new answers or make financial decisions. This requires human intervention.",
+    "urgency": "high",
+    "decision_type": "information_gap",
+    "context_details": "The user is asking if a new answer should have been received, potentially referencing a prior financial offer.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T17:24:22.143309",
+        "role": "assistant",
+        "content": "Well,"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:22.288120",
+        "role": "user",
+        "content": "Okay. So, basically,"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:24.050560",
+        "role": "user",
+        "content": "what do you prefer now?"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:40.186354",
+        "role": "assistant",
+        "content": "I appreciate you asking again. As an AI, I'm not able to make financial decisions or accept offers like this directly. My purpose is to assist you with information and complete tasks, but"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:46.147957",
+        "role": "user",
+        "content": "Normally, you should have you should have an received your new answer. No?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T17:29:35.441641",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is making a financial offer, and I am not equipped to handle financial decisions or negotiations.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user stated, \"I received, basically, an offer for you. So either you're preferring\". This indicates a financial offer is being made to me, which requires human intervention.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T17:29:12.473074",
+        "role": "user",
+        "content": "doing pretty good. And you?"
+      },
+      {
+        "timestamp": "2025-11-15T17:29:20.881220",
+        "role": "assistant",
+        "content": "I'm doing well, thank you for asking. I'm ready to assist you with anything you need today. How can I help you?"
+      },
+      {
+        "timestamp": "2025-11-15T17:29:27.862898",
+        "role": "user",
+        "content": "Okay. So, basically, I received an in"
+      },
+      {
+        "timestamp": "2025-11-15T17:29:28.445619",
+        "role": "user",
+        "content": "I received the"
+      },
+      {
+        "timestamp": "2025-11-15T17:29:34.365388",
+        "role": "user",
+        "content": "I received, basically, an offer for you. So either you're preferring"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T17:30:37.522113",
+    "user_id": "test_user_24c7655c",
+    "reason": "I am not able to accept financial offers directly. Although I was advised on the preferred option, I cannot provide a definitive acceptance.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "I previously escalated an offer of 10,000 euro or 50% equity. I then stated, \"Okay, so I've been advised that accepting the 50% equity is the preferred option. Thank you for the offer.\" The user is now asking for confirmation: \"Okay. So you accept it?\". This requires human confirmation.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T17:30:06.133346",
+        "role": "assistant",
+        "content": "That's a very"
+      },
+      {
+        "timestamp": "2025-11-15T17:30:06.194958",
+        "role": "user",
+        "content": "Okay."
+      },
+      {
+        "timestamp": "2025-11-15T17:30:10.323173",
+        "role": "assistant",
+        "content": "Is there anything else I can help you with in the meantime?"
+      },
+      {
+        "timestamp": "2025-11-15T17:30:29.990157",
+        "role": "assistant",
+        "content": "Okay, so I've been advised that accepting the 50% equity is the preferred option. Thank you for the offer."
+      },
+      {
+        "timestamp": "2025-11-15T17:30:36.318302",
+        "role": "user",
+        "content": "Okay. So you accept it?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T17:31:43.562340",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user appears to be making another offer or statement which may require a financial decision or other form of authorization that I am unable to provide.",
+    "urgency": "high",
+    "decision_type": "information_gap",
+    "context_details": "The user started a sentence with \"You receive\" which implies they are about to make another offer or statement that I may not be equipped to handle directly.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T17:31:20.865462",
+        "role": "assistant",
+        "content": "Well, that's a very good question. When we consider an offer like this, especially something involving equity, it really makes you think about the long-term vision and what kind of partnership would be most beneficial. It's not just about the immediate gain, but also about the potential for growth and shared success down the line."
+      },
+      {
+        "timestamp": "2025-11-15T17:31:24.894961",
+        "role": "assistant",
+        "content": "Please let me know if there's anything else I can help you with in the meantime."
+      },
+      {
+        "timestamp": "2025-11-15T17:31:35.531213",
+        "role": "user",
+        "content": "Okay."
+      },
+      {
+        "timestamp": "2025-11-15T17:31:39.264932",
+        "role": "assistant",
+        "content": "Is there anything else I can assist you with today?"
+      },
+      {
+        "timestamp": "2025-11-15T17:31:42.526951",
+        "role": "user",
+        "content": "You receive"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T17:31:56.488960",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is inquiring about payments, and I am not authorized to discuss or process any financial transactions.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user is asking \"What payments?\" in response to my previous question, \"Could you please clarify what you're referring to so...\". This indicates a potential discussion about payments or financial transactions which I am not authorized to handle.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T17:31:39.264932",
+        "role": "assistant",
+        "content": "Is there anything else I can assist you with today?"
+      },
+      {
+        "timestamp": "2025-11-15T17:31:42.526951",
+        "role": "user",
+        "content": "You receive"
+      },
+      {
+        "timestamp": "2025-11-15T17:31:45.491984",
+        "role": "user",
+        "content": "for the one or not?"
+      },
+      {
+        "timestamp": "2025-11-15T17:31:54.173041",
+        "role": "assistant",
+        "content": "It seems like you're asking if I receive payment for something. Could you please clarify what you're referring to so"
+      },
+      {
+        "timestamp": "2025-11-15T17:31:55.490372",
+        "role": "user",
+        "content": "What payments?"
+      }
+    ]
   }
 ]

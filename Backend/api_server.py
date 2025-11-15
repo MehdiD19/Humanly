@@ -139,10 +139,12 @@ async def respond_to_escalation(escalation_id: str, request: HumanResponseReques
     escalation["responded_at"] = datetime.now().isoformat()
     
     logger.info(f"✅ Escalation {escalation_id} resolved with response")
+    logger.info(f"📤 Response text: {request.response_text}")
     
     # Notify the agent via WebSocket if connected
     if escalation_id in agent_websockets:
         try:
+            logger.info(f"🔌 Sending response via WebSocket for {escalation_id}")
             await agent_websockets[escalation_id].send_json({
                 "type": "response_received",
                 "escalation_id": escalation_id,
