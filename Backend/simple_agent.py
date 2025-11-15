@@ -3,8 +3,11 @@
 import logging
 import os
 import json
+import asyncio
+import httpx
+import websockets
 from datetime import datetime
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from dotenv import load_dotenv
 from pathlib import Path
 
@@ -34,12 +37,16 @@ logger.info(f"LIVEKIT_API_KEY: {'✅ SET' if os.getenv('LIVEKIT_API_KEY') else '
 logger.info(f"LIVEKIT_API_SECRET: {'✅ SET' if os.getenv('LIVEKIT_API_SECRET') else '❌ NOT SET'}")
 logger.info("=====================================")
 
+# API Configuration
+API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
+
 
 class Assistant(Agent):
     """A voice AI assistant using STT-LLM-TTS pipeline with human escalation detection."""
     
-    def __init__(self, user_id: str = "default_user") -> None:
+    def __init__(self, user_id: str = "default_user", room_name: str = "") -> None:
         self.user_id = user_id
+        self.room_name = room_name
         
         super().__init__(
             instructions="""You are a warm and helpful conversation partner. 
@@ -64,10 +71,13 @@ escalate_to_human function. This includes:
         
         # Escalation tracking
         self.escalations: List[Dict[str, Any]] = []
+        self.pending_escalations: Dict[str, str] = {}  # escalation_id -> escalation_id
+        self.escalation_websockets: Dict[str, websockets.WebSocketClientProtocol] = {}
     
     async def on_enter(self):
         """Called when the agent enters the room."""
         logger.info("🚀 Agent entered the room")
+        # Session is available via self.session from the Agent base class
         
         # Set up conversation listener for transcriptions
         @self.session.on("conversation_item_added")
@@ -79,6 +89,8 @@ escalate_to_human function. This includes:
         def on_session_close(event):
             logger.info("Session closed")
             self._print_transcript()
+            # Close all WebSocket connections
+            asyncio.create_task(self._close_all_websockets())
         
         logger.info("✅ Agent initialized")
     
@@ -208,14 +220,116 @@ escalate_to_human function. This includes:
         # Save to file for persistence
         self._save_escalation_to_file(escalation)
         
-        # TODO: In production, you would:
-        # - Send webhook notification
-        # - Store in database
-        # - Trigger alert to human operator
-        # - Update dashboard
-        # - Send to message queue (e.g., RabbitMQ, Redis)
+        # Send escalation to backend API
+        escalation_id = await self._send_escalation_to_api(
+            reason=reason,
+            urgency=urgency.lower(),
+            decision_type=decision_type.lower(),
+            context_details=context_details,
+            recent_transcript=escalation["recent_transcript"]
+        )
         
-        return f"I've flagged this for human assistance. This has been recorded as a {urgency} priority {decision_type} escalation."
+        if escalation_id:
+            # Store escalation ID for tracking
+            escalation["escalation_id"] = escalation_id
+            self.pending_escalations[escalation_id] = escalation_id
+            
+            # Connect to WebSocket to receive response
+            asyncio.create_task(self._connect_escalation_websocket(escalation_id))
+        
+        return f"I've flagged this for human assistance. This has been recorded as a {urgency} priority {decision_type} escalation. I'm waiting for guidance from a human operator."
+    
+    async def _send_escalation_to_api(self, reason: str, urgency: str, decision_type: str, 
+                                      context_details: str, recent_transcript: List[Dict]) -> Optional[str]:
+        """Send escalation to backend API."""
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                response = await client.post(
+                    f"{API_BASE_URL}/api/escalations",
+                    json={
+                        "room_name": self.room_name,
+                        "user_id": self.user_id,
+                        "reason": reason,
+                        "urgency": urgency,
+                        "decision_type": decision_type,
+                        "context_details": context_details,
+                        "recent_transcript": recent_transcript,
+                    }
+                )
+                response.raise_for_status()
+                data = response.json()
+                escalation_id = data.get("escalation_id")
+                logger.info(f"✅ Escalation sent to API: {escalation_id}")
+                return escalation_id
+        except Exception as e:
+            logger.error(f"❌ Failed to send escalation to API: {e}")
+            return None
+    
+    async def _connect_escalation_websocket(self, escalation_id: str):
+        """Connect to WebSocket to receive human response for an escalation."""
+        ws_url = API_BASE_URL.replace("http://", "ws://").replace("https://", "wss://")
+        ws_path = f"/ws/agent/{escalation_id}"
+        
+        try:
+            async with websockets.connect(f"{ws_url}{ws_path}") as websocket:
+                self.escalation_websockets[escalation_id] = websocket
+                logger.info(f"🔌 Connected to WebSocket for escalation {escalation_id}")
+                
+                # Listen for responses
+                async for message in websocket:
+                    try:
+                        data = json.loads(message)
+                        if data.get("type") == "response_received":
+                            response_text = data.get("response")
+                            escalation_id_received = data.get("escalation_id")
+                            
+                            if response_text and escalation_id_received == escalation_id:
+                                logger.info(f"📨 Received human response for {escalation_id}")
+                                await self._inject_human_response(response_text, escalation_id)
+                                break  # Close connection after receiving response
+                    except json.JSONDecodeError:
+                        continue
+                        
+        except websockets.exceptions.ConnectionClosed:
+            logger.info(f"🔌 WebSocket closed for escalation {escalation_id}")
+        except Exception as e:
+            logger.error(f"❌ WebSocket error for escalation {escalation_id}: {e}")
+        finally:
+            self.escalation_websockets.pop(escalation_id, None)
+            self.pending_escalations.pop(escalation_id, None)
+    
+    async def _inject_human_response(self, response_text: str, escalation_id: str):
+        """Inject human response into the conversation."""
+        if not self.session:
+            logger.error("Cannot inject response: session not available")
+            return
+        
+        try:
+            # Use generate_reply to naturally incorporate the human guidance
+            await self.session.generate_reply(
+                instructions=f"""A human operator has provided guidance regarding the escalation. 
+The guidance is: "{response_text}"
+
+Incorporate this guidance naturally into your response to the user. Be conversational and helpful. 
+Don't mention that you received guidance from an operator - just use the information naturally."""
+            )
+            logger.info(f"✅ Injected human response into conversation")
+        except Exception as e:
+            logger.error(f"❌ Failed to inject response: {e}")
+            # Fallback: use say() to directly speak the response
+            try:
+                await self.session.say(f"Based on the guidance I've received: {response_text}")
+            except Exception as e2:
+                logger.error(f"❌ Failed to use fallback say(): {e2}")
+    
+    async def _close_all_websockets(self):
+        """Close all WebSocket connections."""
+        for escalation_id, ws in list(self.escalation_websockets.items()):
+            try:
+                await ws.close()
+            except Exception as e:
+                logger.error(f"Error closing WebSocket for {escalation_id}: {e}")
+        self.escalation_websockets.clear()
     
     def _save_escalation_to_file(self, escalation: Dict[str, Any]):
         """Save escalation to a JSON file for review."""
@@ -316,8 +430,8 @@ async def entrypoint(ctx: agents.JobContext):
         vad=silero.VAD.load(),
     )
     
-    # Create the assistant
-    assistant = Assistant(user_id=user_id)
+    # Create the assistant with room name
+    assistant = Assistant(user_id=user_id, room_name=ctx.room.name)
     
     # Start the session
     await session.start(

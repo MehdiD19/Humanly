@@ -122,6 +122,31 @@
   cursor: not-allowed;
 }
 
+.dashboard-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.875rem 2rem;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--text-gray-900);
+  background: var(--bg-white);
+  border: 1.5px solid var(--text-black);
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: var(--transition);
+  width: 100%;
+  max-width: 300px;
+}
+
+.dashboard-button:hover {
+  background: var(--text-black);
+  color: var(--bg-white);
+  box-shadow: var(--shadow-md);
+}
+
 .spinner {
   display: inline-block;
   width: 16px;
@@ -170,6 +195,11 @@
   .start-button {
     padding: 0.875rem 1.5rem;
     font-size: 1rem;
+  }
+
+  .dashboard-button {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
   }
 }
 

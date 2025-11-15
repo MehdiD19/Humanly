@@ -33,5 +33,175 @@
         "content": "ten thousand euro or twenty percent equity. What do you think?"
       }
     ]
+  },
+  {
+    "timestamp": "2025-11-15T16:32:04.788394",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is making a financial offer, which requires human intervention for decision-making and authorization.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user proposed \"ten thousand dollar in cash\" to the AI.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T16:31:43.884134",
+        "role": "assistant",
+        "content": "I'm doing well, thank you for asking! I'm here and ready to help you with anything you need."
+      },
+      {
+        "timestamp": "2025-11-15T16:31:49.108325",
+        "role": "user",
+        "content": "Thanks thanks, mate."
+      },
+      {
+        "timestamp": "2025-11-15T16:31:56.089964",
+        "role": "assistant",
+        "content": "You're very welcome! Is there something specific you'd like help with today, or just chatting?"
+      },
+      {
+        "timestamp": "2025-11-15T16:32:03.825087",
+        "role": "user",
+        "content": "I have something to propose you. I propose you"
+      },
+      {
+        "timestamp": "2025-11-15T16:32:03.910121",
+        "role": "user",
+        "content": "ten ten thousand dollar in cash"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T16:32:07.783026",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is making a financial offer and asking for a preference, which requires human intervention for decision-making and authorization.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user is making a financial offer, asking the AI to choose between \"ten thousand dollar in cash\" or \"twenty percent equity.\"",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T16:31:49.108325",
+        "role": "user",
+        "content": "Thanks thanks, mate."
+      },
+      {
+        "timestamp": "2025-11-15T16:31:56.089964",
+        "role": "assistant",
+        "content": "You're very welcome! Is there something specific you'd like help with today, or just chatting?"
+      },
+      {
+        "timestamp": "2025-11-15T16:32:03.825087",
+        "role": "user",
+        "content": "I have something to propose you. I propose you"
+      },
+      {
+        "timestamp": "2025-11-15T16:32:03.910121",
+        "role": "user",
+        "content": "ten ten thousand dollar in cash"
+      },
+      {
+        "timestamp": "2025-11-15T16:32:06.949409",
+        "role": "user",
+        "content": "or twenty percent equity. What do you prefer?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T16:39:12.589135",
+    "user_id": "test_user_24c7655c",
+    "reason": "This is a financial decision that requires human intervention.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user is asking for a preference between a financial offer (ten thousand euro) and equity (twenty percent). This kind of decision should be made by a human.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T16:38:49.914651",
+        "role": "assistant",
+        "content": "Hello there! How are you doing today?"
+      },
+      {
+        "timestamp": "2025-11-15T16:38:56.994704",
+        "role": "user",
+        "content": "I'm doing pretty good today and you."
+      },
+      {
+        "timestamp": "2025-11-15T16:39:03.662539",
+        "role": "assistant",
+        "content": "I'm doing well, thank you! I'm ready to assist you. Is there anything I can help you with today?"
+      },
+      {
+        "timestamp": "2025-11-15T16:39:11.750046",
+        "role": "user",
+        "content": "Do you prefer ten thousand euro or twenty percent equity?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T16:40:13.814146",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is asking about a financial decision that was previously escalated. I cannot make or confirm such decisions.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user is asking if a decision has been made regarding the twenty percent equity, following up on a previous financial question that was escalated. This still requires human intervention.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T16:39:32.055322",
+        "role": "user",
+        "content": "There's a Okay. Continue."
+      },
+      {
+        "timestamp": "2025-11-15T16:39:43.968062",
+        "role": "assistant",
+        "content": "I'm not able to continue with the previous response as it was an escalation for a human to handle. Is there something else I can help you with?"
+      },
+      {
+        "timestamp": "2025-11-15T16:39:50.062038",
+        "role": "user",
+        "content": "Sounds better."
+      },
+      {
+        "timestamp": "2025-11-15T16:39:58.902344",
+        "role": "assistant",
+        "content": "I'm glad to hear that. I'm ready to assist you. Is there anything else I can help you with today?"
+      },
+      {
+        "timestamp": "2025-11-15T16:40:12.820835",
+        "role": "user",
+        "content": "Yes. So have you made the for the twenty percent equity thing?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T16:41:00.202656",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is discussing a financial decision and mentions human assistance, but the statement is unclear and still requires human interpretation and response.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user is making a statement about the 'twenty percent equity' decision, referring to human assistance, and then indicating 'there's not' without a clear subject. This still relates to a financial decision and requires human clarification and intervention.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T16:40:26.399996",
+        "role": "user",
+        "content": "What?"
+      },
+      {
+        "timestamp": "2025-11-15T16:40:51.727840",
+        "role": "assistant",
+        "content": "I apologize if my previous response was unclear. As an AI, I am not capable of making financial decisions or expressing preferences in matters like choosing between a sum of money and"
+      },
+      {
+        "timestamp": "2025-11-15T16:40:56.280524",
+        "role": "assistant",
+        "content": "I"
+      },
+      {
+        "timestamp": "2025-11-15T16:40:58.532981",
+        "role": "user",
+        "content": "After I think after having human assistant, I think twenty percent is them. No. You may have to check with human assistance."
+      },
+      {
+        "timestamp": "2025-11-15T16:40:58.682984",
+        "role": "user",
+        "content": "There's not."
+      }
+    ]
   }
 ]
