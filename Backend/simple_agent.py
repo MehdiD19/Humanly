@@ -14,6 +14,9 @@ from pathlib import Path
 from livekit import agents
 from livekit.agents import AgentSession, Agent, WorkerOptions, RoomInputOptions, function_tool, RunContext
 from livekit.plugins import noise_cancellation, silero
+from livekit.plugins.deepgram import STT as DeepgramSTT
+from livekit.plugins.google import LLM as GoogleLLM
+from livekit.plugins.elevenlabs import TTS as ElevenLabsTTS
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -55,14 +58,16 @@ Be supportive and genuine in your interactions.
 Your responses are concise, to the point, and conversational.
 Avoid complex formatting, punctuation, emojis, asterisks, or other symbols.
 
-IMPORTANT: When you encounter situations that require human decision-making, authorization, 
-or when you lack critical information to properly assist the user, you MUST use the 
-escalate_to_human function. This includes:
-- Financial decisions or offers (e.g., "Do you accept the 10,000 euro offer?")
-- Authorization requests (payments, contracts, sensitive actions)
-- Questions you cannot confidently answer
-- Sensitive personal, medical, or legal matters
-- High-stakes decisions that could have significant consequences""",
+IMPORTANT: Only use the escalate_to_human function for CRITICAL situations that absolutely require 
+human decision-making or authorization. This includes ONLY:
+- Financial decisions or offers requiring acceptance/rejection (e.g., "Do you accept this offer?")
+- Authorization requests for payments, contracts, or sensitive legal actions
+- Sensitive personal, medical, or legal matters requiring professional judgment
+- High-stakes decisions with significant consequences that you cannot make
+- User explicitly requesting to speak with a human
+
+DO NOT escalate for general questions or information gaps. Answer questions to the best of your ability 
+or acknowledge when you don't know something without escalating.""",
         )
         
         # Transcript storage
@@ -76,6 +81,8 @@ escalate_to_human function. This includes:
         self.escalation_context: Dict[str, Dict[str, Any]] = {}  # escalation_id -> context
         self.waiting_for_response: Dict[str, bool] = {}  # escalation_id -> waiting state
         self.filler_tasks: Dict[str, asyncio.Task] = {}  # escalation_id -> filler task
+        self.escalation_triggered = False  # Track if escalation has been triggered in this session
+        self.last_escalation_time: Optional[datetime] = None  # Track last escalation time for deduplication
     
     async def on_enter(self):
         """Called when the agent enters the room."""
@@ -161,10 +168,9 @@ escalate_to_human function. This includes:
     ):
         """Flag a moment in the conversation that requires human intervention or decision-making.
         
-        Use this function when you encounter:
-        - Financial decisions (accepting offers, authorizing payments, budget approvals)
+        Use this function ONLY for CRITICAL situations:
+        - Financial decisions requiring acceptance/rejection (accepting offers, authorizing payments)
         - Authorization requests (signing contracts, approving transactions)
-        - Information gaps where you lack critical knowledge to help the user
         - Sensitive topics (medical, legal, personal matters requiring professional judgment)
         - High-stakes decisions with significant consequences
         - User explicitly requesting to speak with a human
@@ -173,22 +179,38 @@ escalate_to_human function. This includes:
             reason: Clear explanation of why human intervention is needed (2-3 sentences)
             urgency: How urgent this escalation is - must be one of: "low", "medium", "high", "critical"
             decision_type: Category of the escalation - must be one of: 
-                          "financial", "authorization", "information_gap", "sensitive_topic", "user_request"
+                          "financial", "authorization", "sensitive_topic", "user_request"
             context_details: Additional relevant details or information (optional)
         
         Returns:
             Confirmation that the escalation has been logged
         """
         
+        # Check if escalation has already been triggered in this session
+        if self.escalation_triggered:
+            logger.info("⚠️ Escalation already triggered in this session. Ignoring duplicate request.")
+            return "I've already escalated this matter. Let me continue helping you with other questions."
+        
+        # Check for duplicate escalation within last 30 seconds
+        if self.last_escalation_time:
+            time_since_last = (datetime.now() - self.last_escalation_time).total_seconds()
+            if time_since_last < 30:
+                logger.info(f"⚠️ Duplicate escalation attempt within {time_since_last:.1f}s. Ignoring.")
+                return "I'm already handling this. Let me continue our conversation."
+        
         # Validate urgency
         valid_urgency = ["low", "medium", "high", "critical"]
         if urgency.lower() not in valid_urgency:
             urgency = "medium"  # Default fallback
         
-        # Validate decision type
-        valid_types = ["financial", "authorization", "information_gap", "sensitive_topic", "user_request"]
+        # Validate decision type (removed "information_gap" as it's too broad)
+        valid_types = ["financial", "authorization", "sensitive_topic", "user_request"]
         if decision_type.lower() not in valid_types:
-            decision_type = "information_gap"  # Default fallback
+            decision_type = "sensitive_topic"  # Default fallback
+        
+        # Mark escalation as triggered
+        self.escalation_triggered = True
+        self.last_escalation_time = datetime.now()
         
         # Create escalation record
         escalation = {
@@ -249,7 +271,8 @@ escalate_to_human function. This includes:
             # Connect to WebSocket to receive response
             asyncio.create_task(self._connect_escalation_websocket(escalation_id))
         
-        return "I'm going to call it. Let me check with my team about this."
+        # Return empty string to let the LLM generate a natural response
+        return ""
     
     async def _send_escalation_to_api(self, reason: str, urgency: str, decision_type: str, 
                                       context_details: str, recent_transcript: List[Dict]) -> Optional[str]:
@@ -362,14 +385,12 @@ escalate_to_human function. This includes:
             ])
         
         try:
-            # Generate filler content
-            filler_instructions = f"""You're discussing a {decision_type} situation with the user. {context_str}
+            # Generate filler content with simpler, more natural instructions
+            filler_instructions = f"""Continue the conversation naturally about the topic. {context_str}
 
 {recent_context}
 
-While waiting for guidance, talk naturally about this question or situation. Discuss the implications, what factors might be important, or share relevant thoughts. Be conversational, engaging, and thoughtful. Don't mention that you're waiting for someone - just discuss the topic naturally as if you're thinking through it together.
-
-Keep it natural and conversational. You might say things like "Well, that's a very good proposition" or "I think in this case..." or "Imagine if we consider..." - just fill time naturally while discussing the topic."""
+Discuss this naturally with the user. Share thoughts, considerations, or relevant points about the topic. Be conversational and genuine. Don't mention waiting or checking with anyone - just continue the conversation naturally."""
             
             logger.info(f"💬 Generating filler content for escalation {escalation_id}")
             await self.session.generate_reply(instructions=filler_instructions)
@@ -395,19 +416,10 @@ Keep it natural and conversational. You might say things like "Well, that's a ve
         try:
             # Use generate_reply to naturally incorporate the human guidance
             await self.session.generate_reply(
-                instructions=f"""A human operator has provided important guidance. 
+                instructions=f"""A human has provided guidance: "{response_text}"
 
-The guidance is: "{response_text}"
-
-Your response should:
-1. Acknowledge the guidance from the human
-2. Incorporate their decision/information naturally
-3. Communicate the outcome clearly to the user
-4. Be conversational and helpful
-
-Example transitions: "Based on feedback I received...", "Well, after checking...", "So I've been advised that...", "The answer is..."
-
-DO NOT say you got guidance from an operator. Just naturally use the information."""
+Use this information naturally in your response. Communicate it clearly and conversationally to the user. 
+Be natural and don't mention that you received guidance from someone else."""
             )
             logger.info(f"✅ Injected human response into conversation")
         except Exception as e:
@@ -439,6 +451,8 @@ DO NOT say you got guidance from an operator. Just naturally use the information
         # Clear all state
         self.waiting_for_response.clear()
         self.escalation_context.clear()
+        self.escalation_triggered = False
+        self.last_escalation_time = None
     
     def _save_escalation_to_file(self, escalation: Dict[str, Any]):
         """Save escalation to a JSON file for review."""
@@ -523,19 +537,36 @@ def get_or_create_test_user_id():
 async def entrypoint(ctx: agents.JobContext):
     """Main entry point for the agent."""
     logger.info("Starting STT-LLM-TTS Pipeline Agent")
-    logger.info("🎤 STT: Deepgram")
-    logger.info("🧠 LLM: Google Gemini")
-    logger.info("🔊 TTS: Eleven Labs")
+    logger.info("🎤 STT: Deepgram (Direct API)")
+    logger.info("🧠 LLM: Google Gemini (Direct API)")
+    logger.info("🔊 TTS: Eleven Labs (Direct API)")
     
     # Get user ID
     user_id = get_or_create_test_user_id()
     logger.info(f"🆔 User ID: {user_id}")
     
-    # Create agent session with pipeline configuration
+    # Create direct plugin instances (bypasses LiveKit inference gateway)
+    deepgram_stt = DeepgramSTT(
+        model="nova-3",
+        language="en-US",
+        api_key=os.getenv("DEEPGRAM_API_KEY"),
+    )
+    
+    google_llm = GoogleLLM(
+        model="gemini-2.5-flash",
+        api_key=os.getenv("GOOGLE_API_KEY"),
+    )
+    
+    elevenlabs_tts = ElevenLabsTTS(
+        voice_id="Xb7hH8MSUJpSbSDYk0k2",  # Default voice
+        api_key=os.getenv("ELEVENLABS_API_KEY") or os.getenv("ELEVEN_API_KEY"),
+    )
+    
+    # Create agent session with direct plugin instances
     session = AgentSession(
-        stt="deepgram/nova-3:en",
-        llm="google/gemini-2.5-flash",
-        tts="elevenlabs/eleven_turbo_v2_5:Xb7hH8MSUJpSbSDYk0k2",  # Default voice
+        stt=deepgram_stt,
+        llm=google_llm,
+        tts=elevenlabs_tts,
         vad=silero.VAD.load(),
     )
     
