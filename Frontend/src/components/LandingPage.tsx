@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Mic, MessageSquare, Zap } from 'lucide-react'
+import { Mic, MessageSquare, Zap, ShieldAlert } from 'lucide-react'
 import './LandingPage.css'
 
 interface LandingPageProps {
@@ -74,6 +74,21 @@ function LandingPage({ onStart, isLoading }: LandingPageProps) {
           )}
         </motion.button>
 
+        <motion.button
+          className="dashboard-button"
+          onClick={() => {
+            window.location.href = `${window.location.pathname}?mode=dashboard`
+          }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.35 }}
+        >
+          <ShieldAlert size={20} />
+          Escalation Dashboard
+        </motion.button>
+
         <motion.p
           className="landing-footer"
           initial={{ opacity: 0 }}
@@ -88,4 +103,5 @@ function LandingPage({ onStart, isLoading }: LandingPageProps) {
 }
 
 export default LandingPage
+
 

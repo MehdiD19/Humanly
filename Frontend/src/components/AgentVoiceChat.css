@@ -1,14 +1,13 @@
 .voice-chat-container {
   width: 100%;
-  height: 100%;
-  max-height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 2rem;
   background: var(--bg-white);
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
   box-sizing: border-box;
 }
 
@@ -89,7 +88,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .livekit-room {
@@ -231,6 +232,16 @@
   border-color: var(--text-black);
 }
 
+.control-button.disconnect {
+  background: var(--text-black);
+  color: var(--bg-white);
+  border-color: var(--text-black);
+}
+
+.control-button.disconnect:hover {
+  background: #1f1f1f;
+}
+
 .control-button.muted {
   background: #fee2e2;
   color: #dc2626;
@@ -240,16 +251,6 @@
 .control-button.muted:hover {
   background: #dc2626;
   color: var(--bg-white);
-}
-
-.control-button.disconnect {
-  background: var(--text-black);
-  color: var(--bg-white);
-  border-color: var(--text-black);
-}
-
-.control-button.disconnect:hover {
-  background: #1f1f1f;
 }
 
 .control-button.active {
@@ -290,7 +291,7 @@
 }
 
 .settings-panel::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 12px;
   left: 50%;
@@ -388,4 +389,3 @@
     height: 56px;
   }
 }
-

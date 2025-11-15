@@ -1,0 +1,64 @@
+[
+  {
+    "timestamp": "2025-11-15T14:32:45.123Z",
+    "user_id": "test_user_abc123",
+    "reason": "The user is asking whether to accept a 10,000 euro consulting offer. This is a significant financial decision that requires human judgment based on the user's business situation, financial goals, and contract terms.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "Consulting services offer for 10,000 euros from a client",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T14:32:42.000Z",
+        "role": "user",
+        "content": "I have an offer from a client for 10,000 euros to provide consulting services. Do you think I should accept it?"
+      },
+      {
+        "timestamp": "2025-11-15T14:32:45.000Z",
+        "role": "assistant",
+        "content": "I've flagged this for human assistance. This has been recorded as a high priority financial escalation."
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T14:35:12.456Z",
+    "user_id": "test_user_abc123",
+    "reason": "User is inquiring about specific account balance information that I do not have access to. This requires a human with access to their financial systems to provide accurate information.",
+    "urgency": "medium",
+    "decision_type": "information_gap",
+    "context_details": "Account ending in 4567",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T14:35:08.000Z",
+        "role": "user",
+        "content": "What's the current balance on my business account ending in 4567?"
+      },
+      {
+        "timestamp": "2025-11-15T14:35:12.000Z",
+        "role": "assistant",
+        "content": "I've flagged this for human assistance. This has been recorded as a medium priority information_gap escalation."
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T14:38:03.789Z",
+    "user_id": "test_user_abc123",
+    "reason": "The user is reporting chest pain, which is a medical emergency. This requires immediate professional medical attention, not AI assistance.",
+    "urgency": "critical",
+    "decision_type": "sensitive_topic",
+    "context_details": "Medical emergency - chest pain reported",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T14:38:00.000Z",
+        "role": "user",
+        "content": "I've been having chest pains for the last hour. What should I do?"
+      },
+      {
+        "timestamp": "2025-11-15T14:38:03.000Z",
+        "role": "assistant",
+        "content": "I've flagged this for human assistance. This has been recorded as a critical priority sensitive_topic escalation."
+      }
+    ]
+  }
+]
+
+

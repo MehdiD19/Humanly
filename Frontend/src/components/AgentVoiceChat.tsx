@@ -8,7 +8,7 @@ import {
   useLocalParticipant,
 } from '@livekit/components-react'
 import '@livekit/components-styles'
-import { Mic, MicOff, Phone, Loader2, Settings, MessageSquare, Volume2, X } from 'lucide-react'
+import { Mic, MicOff, PhoneOff, Loader2, Settings, MessageSquare, Volume2, X } from 'lucide-react'
 import { livekitService } from '../services/livekitService'
 import AgentTextChat from './AgentTextChat'
 import './AgentVoiceChat.css'
@@ -122,6 +122,9 @@ function AgentVoiceChat({ userId }: AgentVoiceChatProps) {
     setToken('')
     setServerUrl('')
     setIsConnecting(false)
+    setTimeout(() => {
+      window.location.href = window.location.pathname.replace('?mode=dashboard', '')
+    }, 150)
   }
 
   if (!token || !serverUrl) {
@@ -364,12 +367,13 @@ function AgentInterface({ onDisconnect, audioDevices, audioOutputDevices, select
         <motion.button 
           onClick={onDisconnect}
           className="control-button disconnect"
-          title="Disconnect"
+          title="Hang Up"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <Phone size={24} />
+          <PhoneOff size={24} />
         </motion.button>
+        
       </motion.div>
 
       <div className="settings-container">
@@ -467,4 +471,3 @@ function AgentInterface({ onDisconnect, audioDevices, audioOutputDevices, select
 }
 
 export default AgentVoiceChat
-

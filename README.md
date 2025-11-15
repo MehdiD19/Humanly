@@ -1,6 +1,6 @@
 # Humanly
 
-A real-time voice chat application with LiveKit and AI agents.
+A real-time voice chat application with LiveKit and AI agents, featuring intelligent human escalation detection.
 
 ## Prerequisites
 
@@ -63,9 +63,36 @@ A real-time voice chat application with LiveKit and AI agents.
    ```
    Access at `http://localhost:5173` (or port shown in terminal)
 
+## Features
+
+### 🚨 Human Escalation Detection
+The agent now includes intelligent detection for moments requiring human intervention:
+- **Financial decisions** (offers, payments, contracts)
+- **Authorization requests** (approvals, sensitive actions)
+- **Information gaps** (questions outside agent's knowledge)
+- **Sensitive topics** (medical, legal matters)
+- **Direct user requests** for human assistance
+
+All escalations are:
+- ✅ Logged in real-time with detailed context
+- ✅ Saved to `Backend/escalations.json` for review
+- ✅ Categorized by urgency (low/medium/high/critical) and type
+- ✅ Include recent conversation transcript
+
+**[📖 Read the Escalation Detection Guide](Backend/ESCALATION_DETECTION.md)**
+
 ## Running the Application
 
 1. Start the backend (API Server + LiveKit Agent in separate terminals)
 2. Start the frontend
 3. Open the application in your browser
 4. Use the voice or text chat interface to interact with the AI agent
+
+## Testing Escalation Detection
+
+Try these phrases to test the escalation system:
+- "Do you think I should accept the 10,000 euro offer?"
+- "Can you approve this purchase for me?"
+- "I need to speak with a human"
+
+See **[Test Scenarios](Backend/test_escalation_scenarios.md)** for comprehensive testing examples.

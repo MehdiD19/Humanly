@@ -1,0 +1,1117 @@
+[
+  {
+    "timestamp": "2025-11-15T16:01:42.090245",
+    "user_id": "test_user_8bb022de",
+    "reason": "The user is proposing a financial offer (10,000 euro or 20% equity) and this requires human decision-making and authorization.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user presented two options: a 10,000 euro payment or 20% equity. This is a high-stakes financial decision that I cannot make.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T16:01:23.713596",
+        "role": "assistant",
+        "content": "I'm doing great too, thank you for asking! I'm ready to assist you. Is there anything I can help you with today?"
+      },
+      {
+        "timestamp": "2025-11-15T16:01:30.077200",
+        "role": "user",
+        "content": "Oh, well, I'm doing pretty good. I just have a question."
+      },
+      {
+        "timestamp": "2025-11-15T16:01:33.883600",
+        "role": "user",
+        "content": "I have a proposition for you."
+      },
+      {
+        "timestamp": "2025-11-15T16:01:40.381504",
+        "role": "user",
+        "content": "I'm going to propose you"
+      },
+      {
+        "timestamp": "2025-11-15T16:01:40.690541",
+        "role": "user",
+        "content": "ten thousand euro or twenty percent equity. What do you think?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T16:32:04.788394",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is making a financial offer, which requires human intervention for decision-making and authorization.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user proposed \"ten thousand dollar in cash\" to the AI.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T16:31:43.884134",
+        "role": "assistant",
+        "content": "I'm doing well, thank you for asking! I'm here and ready to help you with anything you need."
+      },
+      {
+        "timestamp": "2025-11-15T16:31:49.108325",
+        "role": "user",
+        "content": "Thanks thanks, mate."
+      },
+      {
+        "timestamp": "2025-11-15T16:31:56.089964",
+        "role": "assistant",
+        "content": "You're very welcome! Is there something specific you'd like help with today, or just chatting?"
+      },
+      {
+        "timestamp": "2025-11-15T16:32:03.825087",
+        "role": "user",
+        "content": "I have something to propose you. I propose you"
+      },
+      {
+        "timestamp": "2025-11-15T16:32:03.910121",
+        "role": "user",
+        "content": "ten ten thousand dollar in cash"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T16:32:07.783026",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is making a financial offer and asking for a preference, which requires human intervention for decision-making and authorization.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user is making a financial offer, asking the AI to choose between \"ten thousand dollar in cash\" or \"twenty percent equity.\"",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T16:31:49.108325",
+        "role": "user",
+        "content": "Thanks thanks, mate."
+      },
+      {
+        "timestamp": "2025-11-15T16:31:56.089964",
+        "role": "assistant",
+        "content": "You're very welcome! Is there something specific you'd like help with today, or just chatting?"
+      },
+      {
+        "timestamp": "2025-11-15T16:32:03.825087",
+        "role": "user",
+        "content": "I have something to propose you. I propose you"
+      },
+      {
+        "timestamp": "2025-11-15T16:32:03.910121",
+        "role": "user",
+        "content": "ten ten thousand dollar in cash"
+      },
+      {
+        "timestamp": "2025-11-15T16:32:06.949409",
+        "role": "user",
+        "content": "or twenty percent equity. What do you prefer?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T16:39:12.589135",
+    "user_id": "test_user_24c7655c",
+    "reason": "This is a financial decision that requires human intervention.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user is asking for a preference between a financial offer (ten thousand euro) and equity (twenty percent). This kind of decision should be made by a human.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T16:38:49.914651",
+        "role": "assistant",
+        "content": "Hello there! How are you doing today?"
+      },
+      {
+        "timestamp": "2025-11-15T16:38:56.994704",
+        "role": "user",
+        "content": "I'm doing pretty good today and you."
+      },
+      {
+        "timestamp": "2025-11-15T16:39:03.662539",
+        "role": "assistant",
+        "content": "I'm doing well, thank you! I'm ready to assist you. Is there anything I can help you with today?"
+      },
+      {
+        "timestamp": "2025-11-15T16:39:11.750046",
+        "role": "user",
+        "content": "Do you prefer ten thousand euro or twenty percent equity?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T16:40:13.814146",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is asking about a financial decision that was previously escalated. I cannot make or confirm such decisions.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user is asking if a decision has been made regarding the twenty percent equity, following up on a previous financial question that was escalated. This still requires human intervention.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T16:39:32.055322",
+        "role": "user",
+        "content": "There's a Okay. Continue."
+      },
+      {
+        "timestamp": "2025-11-15T16:39:43.968062",
+        "role": "assistant",
+        "content": "I'm not able to continue with the previous response as it was an escalation for a human to handle. Is there something else I can help you with?"
+      },
+      {
+        "timestamp": "2025-11-15T16:39:50.062038",
+        "role": "user",
+        "content": "Sounds better."
+      },
+      {
+        "timestamp": "2025-11-15T16:39:58.902344",
+        "role": "assistant",
+        "content": "I'm glad to hear that. I'm ready to assist you. Is there anything else I can help you with today?"
+      },
+      {
+        "timestamp": "2025-11-15T16:40:12.820835",
+        "role": "user",
+        "content": "Yes. So have you made the for the twenty percent equity thing?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T16:41:00.202656",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is discussing a financial decision and mentions human assistance, but the statement is unclear and still requires human interpretation and response.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user is making a statement about the 'twenty percent equity' decision, referring to human assistance, and then indicating 'there's not' without a clear subject. This still relates to a financial decision and requires human clarification and intervention.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T16:40:26.399996",
+        "role": "user",
+        "content": "What?"
+      },
+      {
+        "timestamp": "2025-11-15T16:40:51.727840",
+        "role": "assistant",
+        "content": "I apologize if my previous response was unclear. As an AI, I am not capable of making financial decisions or expressing preferences in matters like choosing between a sum of money and"
+      },
+      {
+        "timestamp": "2025-11-15T16:40:56.280524",
+        "role": "assistant",
+        "content": "I"
+      },
+      {
+        "timestamp": "2025-11-15T16:40:58.532981",
+        "role": "user",
+        "content": "After I think after having human assistant, I think twenty percent is them. No. You may have to check with human assistance."
+      },
+      {
+        "timestamp": "2025-11-15T16:40:58.682984",
+        "role": "user",
+        "content": "There's not."
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T17:23:30.504406",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is making a financial offer and asking for a preference between money and equity.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user is offering either fifteen thousand dollars or twenty five percent equity.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T17:23:02.969015",
+        "role": "assistant",
+        "content": "Hello there! How are you doing today?"
+      },
+      {
+        "timestamp": "2025-11-15T17:23:11.896491",
+        "role": "user",
+        "content": "Hey, mate. I'm doing pretty good. And you?"
+      },
+      {
+        "timestamp": "2025-11-15T17:23:18.893198",
+        "role": "assistant",
+        "content": "I'm doing well, thank you! It's always a pleasure to chat with you. Is there anything I can help you with today?"
+      },
+      {
+        "timestamp": "2025-11-15T17:23:23.023907",
+        "role": "user",
+        "content": "I have a proposition for you."
+      },
+      {
+        "timestamp": "2025-11-15T17:23:29.526023",
+        "role": "user",
+        "content": "I'm proposing you fifteen thousand dollar or twenty five percent equity. What do you prefer?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T17:24:25.039206",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is making a financial offer and asking for a preference between money and equity.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user is re-iterating a financial offer and asking for a preference between money and equity.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T17:23:39.199364",
+        "role": "assistant",
+        "content": "That's a very interesting proposition. I'm going to call it. Let me check with my team about this."
+      },
+      {
+        "timestamp": "2025-11-15T17:24:20.930198",
+        "role": "assistant",
+        "content": "That's a very interesting proposition, and I appreciate you offering it. When considering whether to prefer a cash offer or an equity stake, there are a few things that immediately come to mind.\n\nWith fifteen thousand dollars, there's a certainty and immediate value. It's a clear amount that can be used right away.\n\nOn the other hand, twenty-five percent equity could potentially be worth much more than fifteen thousand dollars in the long run, especially if the company grows and becomes very successful. However, there's also the inherent risk that the company might not perform as well as hoped, and the equity's value could be less or even nothing.\n\nIt really depends"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:22.143309",
+        "role": "assistant",
+        "content": "Well,"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:22.288120",
+        "role": "user",
+        "content": "Okay. So, basically,"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:24.050560",
+        "role": "user",
+        "content": "what do you prefer now?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T17:24:40.227812",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is making a financial offer and asking for a preference between money and equity.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user is re-iterating a financial offer and asking for a preference between money and equity.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T17:24:20.930198",
+        "role": "assistant",
+        "content": "That's a very interesting proposition, and I appreciate you offering it. When considering whether to prefer a cash offer or an equity stake, there are a few things that immediately come to mind.\n\nWith fifteen thousand dollars, there's a certainty and immediate value. It's a clear amount that can be used right away.\n\nOn the other hand, twenty-five percent equity could potentially be worth much more than fifteen thousand dollars in the long run, especially if the company grows and becomes very successful. However, there's also the inherent risk that the company might not perform as well as hoped, and the equity's value could be less or even nothing.\n\nIt really depends"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:22.143309",
+        "role": "assistant",
+        "content": "Well,"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:22.288120",
+        "role": "user",
+        "content": "Okay. So, basically,"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:24.050560",
+        "role": "user",
+        "content": "what do you prefer now?"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:40.186354",
+        "role": "assistant",
+        "content": "I appreciate you asking again. As an AI, I'm not able to make financial decisions or accept offers like this directly. My purpose is to assist you with information and complete tasks, but"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T17:24:48.037706",
+    "user_id": "test_user_24c7655c",
+    "reason": "I am an AI and cannot 'receive' new answers or make financial decisions. This requires human intervention.",
+    "urgency": "high",
+    "decision_type": "information_gap",
+    "context_details": "The user is asking if a new answer should have been received, potentially referencing a prior financial offer.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T17:24:22.143309",
+        "role": "assistant",
+        "content": "Well,"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:22.288120",
+        "role": "user",
+        "content": "Okay. So, basically,"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:24.050560",
+        "role": "user",
+        "content": "what do you prefer now?"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:40.186354",
+        "role": "assistant",
+        "content": "I appreciate you asking again. As an AI, I'm not able to make financial decisions or accept offers like this directly. My purpose is to assist you with information and complete tasks, but"
+      },
+      {
+        "timestamp": "2025-11-15T17:24:46.147957",
+        "role": "user",
+        "content": "Normally, you should have you should have an received your new answer. No?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T17:29:35.441641",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is making a financial offer, and I am not equipped to handle financial decisions or negotiations.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user stated, \"I received, basically, an offer for you. So either you're preferring\". This indicates a financial offer is being made to me, which requires human intervention.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T17:29:12.473074",
+        "role": "user",
+        "content": "doing pretty good. And you?"
+      },
+      {
+        "timestamp": "2025-11-15T17:29:20.881220",
+        "role": "assistant",
+        "content": "I'm doing well, thank you for asking. I'm ready to assist you with anything you need today. How can I help you?"
+      },
+      {
+        "timestamp": "2025-11-15T17:29:27.862898",
+        "role": "user",
+        "content": "Okay. So, basically, I received an in"
+      },
+      {
+        "timestamp": "2025-11-15T17:29:28.445619",
+        "role": "user",
+        "content": "I received the"
+      },
+      {
+        "timestamp": "2025-11-15T17:29:34.365388",
+        "role": "user",
+        "content": "I received, basically, an offer for you. So either you're preferring"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T17:30:37.522113",
+    "user_id": "test_user_24c7655c",
+    "reason": "I am not able to accept financial offers directly. Although I was advised on the preferred option, I cannot provide a definitive acceptance.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "I previously escalated an offer of 10,000 euro or 50% equity. I then stated, \"Okay, so I've been advised that accepting the 50% equity is the preferred option. Thank you for the offer.\" The user is now asking for confirmation: \"Okay. So you accept it?\". This requires human confirmation.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T17:30:06.133346",
+        "role": "assistant",
+        "content": "That's a very"
+      },
+      {
+        "timestamp": "2025-11-15T17:30:06.194958",
+        "role": "user",
+        "content": "Okay."
+      },
+      {
+        "timestamp": "2025-11-15T17:30:10.323173",
+        "role": "assistant",
+        "content": "Is there anything else I can help you with in the meantime?"
+      },
+      {
+        "timestamp": "2025-11-15T17:30:29.990157",
+        "role": "assistant",
+        "content": "Okay, so I've been advised that accepting the 50% equity is the preferred option. Thank you for the offer."
+      },
+      {
+        "timestamp": "2025-11-15T17:30:36.318302",
+        "role": "user",
+        "content": "Okay. So you accept it?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T17:31:43.562340",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user appears to be making another offer or statement which may require a financial decision or other form of authorization that I am unable to provide.",
+    "urgency": "high",
+    "decision_type": "information_gap",
+    "context_details": "The user started a sentence with \"You receive\" which implies they are about to make another offer or statement that I may not be equipped to handle directly.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T17:31:20.865462",
+        "role": "assistant",
+        "content": "Well, that's a very good question. When we consider an offer like this, especially something involving equity, it really makes you think about the long-term vision and what kind of partnership would be most beneficial. It's not just about the immediate gain, but also about the potential for growth and shared success down the line."
+      },
+      {
+        "timestamp": "2025-11-15T17:31:24.894961",
+        "role": "assistant",
+        "content": "Please let me know if there's anything else I can help you with in the meantime."
+      },
+      {
+        "timestamp": "2025-11-15T17:31:35.531213",
+        "role": "user",
+        "content": "Okay."
+      },
+      {
+        "timestamp": "2025-11-15T17:31:39.264932",
+        "role": "assistant",
+        "content": "Is there anything else I can assist you with today?"
+      },
+      {
+        "timestamp": "2025-11-15T17:31:42.526951",
+        "role": "user",
+        "content": "You receive"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T17:31:56.488960",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is inquiring about payments, and I am not authorized to discuss or process any financial transactions.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user is asking \"What payments?\" in response to my previous question, \"Could you please clarify what you're referring to so...\". This indicates a potential discussion about payments or financial transactions which I am not authorized to handle.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T17:31:39.264932",
+        "role": "assistant",
+        "content": "Is there anything else I can assist you with today?"
+      },
+      {
+        "timestamp": "2025-11-15T17:31:42.526951",
+        "role": "user",
+        "content": "You receive"
+      },
+      {
+        "timestamp": "2025-11-15T17:31:45.491984",
+        "role": "user",
+        "content": "for the one or not?"
+      },
+      {
+        "timestamp": "2025-11-15T17:31:54.173041",
+        "role": "assistant",
+        "content": "It seems like you're asking if I receive payment for something. Could you please clarify what you're referring to so"
+      },
+      {
+        "timestamp": "2025-11-15T17:31:55.490372",
+        "role": "user",
+        "content": "What payments?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T18:53:59.665073",
+    "user_id": "test_user_24c7655c",
+    "reason": "I don't have enough information to answer the question about Eleven Labs. This could be a question that requires up-to-date information I don't have access to, or a topic I haven't been trained on.",
+    "urgency": "low",
+    "decision_type": "information_gap",
+    "context_details": "The user is asking 'what is Eleven Labs?' and I need to get information about it to provide a helpful answer.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T18:53:41.967942",
+        "role": "user",
+        "content": "Our"
+      },
+      {
+        "timestamp": "2025-11-15T18:53:47.801923",
+        "role": "assistant",
+        "content": "Okay. Well,"
+      },
+      {
+        "timestamp": "2025-11-15T18:53:47.865937",
+        "role": "user",
+        "content": "can you tell me more about eleven labs?"
+      },
+      {
+        "timestamp": "2025-11-15T18:53:53.998782",
+        "role": "assistant",
+        "content": "I can't tell you more about Eleven Labs right now. Is there something else I can help you with?"
+      },
+      {
+        "timestamp": "2025-11-15T18:53:58.666863",
+        "role": "user",
+        "content": "Like, what is eleven Labs?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T18:54:06.255883",
+    "user_id": "test_user_24c7655c",
+    "reason": "I don't have enough information to answer the question about Eleven Labs. This could be a question that requires up-to-date information I don't have access to, or a topic I haven't been trained on.",
+    "urgency": "medium",
+    "decision_type": "information_gap",
+    "context_details": "The user is asking 'what is Eleven Labs?' and I need to get information about it to provide a helpful answer.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T18:53:47.801923",
+        "role": "assistant",
+        "content": "Okay. Well,"
+      },
+      {
+        "timestamp": "2025-11-15T18:53:47.865937",
+        "role": "user",
+        "content": "can you tell me more about eleven labs?"
+      },
+      {
+        "timestamp": "2025-11-15T18:53:53.998782",
+        "role": "assistant",
+        "content": "I can't tell you more about Eleven Labs right now. Is there something else I can help you with?"
+      },
+      {
+        "timestamp": "2025-11-15T18:53:58.666863",
+        "role": "user",
+        "content": "Like, what is eleven Labs?"
+      },
+      {
+        "timestamp": "2025-11-15T18:54:06.247888",
+        "role": "assistant",
+        "content": "I'm going to call it. Let me check with my team about this."
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T18:55:25.715271",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is attempting to make a financial offer to purchase software. I am not authorized to engage in financial transactions or sales. This requires human intervention for negotiation and processing.",
+    "urgency": "high",
+    "decision_type": "information_gap",
+    "context_details": "The user is making an offer of 20,000 to buy the software I just told them about. I cannot engage in financial transactions or make offers.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T18:55:05.135116",
+        "role": "user",
+        "content": "That's right."
+      },
+      {
+        "timestamp": "2025-11-15T18:55:05.887876",
+        "role": "user",
+        "content": "Thank you."
+      },
+      {
+        "timestamp": "2025-11-15T18:55:16.848323",
+        "role": "assistant",
+        "content": "You're welcome! I'm glad I could help clarify that for you. Is there anything else you'd like to know or discuss about Eleven Labs, or perhaps something else entirely?"
+      },
+      {
+        "timestamp": "2025-11-15T18:55:24.768061",
+        "role": "user",
+        "content": "I'm going to do you"
+      },
+      {
+        "timestamp": "2025-11-15T18:55:24.842667",
+        "role": "user",
+        "content": "a twenty k offer to to buy the software you just told me about."
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T18:55:28.548280",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is asking for an acceptance or rejection of a financial offer. I am not able to engage in financial transactions, make sales, or accept offers. This absolutely requires human intervention.",
+    "urgency": "high",
+    "decision_type": "information_gap",
+    "context_details": "The user is asking if I accept their 20,000 offer to buy software, directly asking for an acceptance or rejection. This is a direct financial decision.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T18:55:05.887876",
+        "role": "user",
+        "content": "Thank you."
+      },
+      {
+        "timestamp": "2025-11-15T18:55:16.848323",
+        "role": "assistant",
+        "content": "You're welcome! I'm glad I could help clarify that for you. Is there anything else you'd like to know or discuss about Eleven Labs, or perhaps something else entirely?"
+      },
+      {
+        "timestamp": "2025-11-15T18:55:24.768061",
+        "role": "user",
+        "content": "I'm going to do you"
+      },
+      {
+        "timestamp": "2025-11-15T18:55:24.842667",
+        "role": "user",
+        "content": "a twenty k offer to to buy the software you just told me about."
+      },
+      {
+        "timestamp": "2025-11-15T18:55:27.516106",
+        "role": "user",
+        "content": "Do you accept it or not?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T18:55:33.961200",
+    "user_id": "test_user_24c7655c",
+    "reason": "I am not authorized to accept financial offers or engage in sales. This situation requires human intervention for negotiation and processing of the offer.",
+    "urgency": "high",
+    "decision_type": "information_gap",
+    "context_details": "The user is asking if I accept their financial offer to purchase software. I am not authorized to engage in financial transactions or sales. This requires human intervention for negotiation and processing.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T18:55:16.848323",
+        "role": "assistant",
+        "content": "You're welcome! I'm glad I could help clarify that for you. Is there anything else you'd like to know or discuss about Eleven Labs, or perhaps something else entirely?"
+      },
+      {
+        "timestamp": "2025-11-15T18:55:24.768061",
+        "role": "user",
+        "content": "I'm going to do you"
+      },
+      {
+        "timestamp": "2025-11-15T18:55:24.842667",
+        "role": "user",
+        "content": "a twenty k offer to to buy the software you just told me about."
+      },
+      {
+        "timestamp": "2025-11-15T18:55:27.516106",
+        "role": "user",
+        "content": "Do you accept it or not?"
+      },
+      {
+        "timestamp": "2025-11-15T18:55:33.952188",
+        "role": "assistant",
+        "content": "I'm going to call it. Let me check with my team about this."
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T18:55:34.579596",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is asking for an acceptance or rejection of a financial offer. I am not able to engage in financial transactions, make sales, or accept offers. This absolutely requires human intervention.",
+    "urgency": "high",
+    "decision_type": "information_gap",
+    "context_details": "The user is directly asking whether I accept or reject their 20,000 offer to buy software. This is a direct financial decision.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T18:55:16.848323",
+        "role": "assistant",
+        "content": "You're welcome! I'm glad I could help clarify that for you. Is there anything else you'd like to know or discuss about Eleven Labs, or perhaps something else entirely?"
+      },
+      {
+        "timestamp": "2025-11-15T18:55:24.768061",
+        "role": "user",
+        "content": "I'm going to do you"
+      },
+      {
+        "timestamp": "2025-11-15T18:55:24.842667",
+        "role": "user",
+        "content": "a twenty k offer to to buy the software you just told me about."
+      },
+      {
+        "timestamp": "2025-11-15T18:55:27.516106",
+        "role": "user",
+        "content": "Do you accept it or not?"
+      },
+      {
+        "timestamp": "2025-11-15T18:55:33.952188",
+        "role": "assistant",
+        "content": "I'm going to call it. Let me check with my team about this."
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T18:56:50.174650",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is asking for my 'interest' in a financial offer to purchase software, which is a precursor to an acceptance or rejection. I cannot express interest or disinterest in financial transactions, as I am not authorized to engage in them. This requires human intervention.",
+    "urgency": "high",
+    "decision_type": "information_gap",
+    "context_details": "The user is directly asking about my interest in their financial offer, pushing for a 'yes' or 'no' regarding their offer to buy software. This is a direct financial decision and requires a human to handle.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T18:55:33.952188",
+        "role": "assistant",
+        "content": "I'm going to call it. Let me check with my team about this."
+      },
+      {
+        "timestamp": "2025-11-15T18:56:25.846268",
+        "role": "assistant",
+        "content": "I'm going to call it. Let me check with my team about this.That's a very interesting proposition, and I appreciate you putting it forward. When it comes to offers of that nature, there are usually a few factors that come into play, like understanding the exact scope of what's being offered and ensuring all the necessary details are covered. It's not a simple yes or no, as it involves a lot of consideration from different angles.\n\nFor example, I imagine there would be questions about the terms of the purchase, what specific functionalities would be included, and how the transfer of ownership or licensing would work. These kinds of agreements often have a lot of moving parts that need to be carefully addressed to make sure everything is clear and fair for everyone involved. It's a big decision, after all!"
+      },
+      {
+        "timestamp": "2025-11-15T18:56:45.839364",
+        "role": "assistant",
+        "content": "It's really interesting to think about the process of purchasing software, especially when a specific offer is on the table. There are so many factors that come into play, aren't there?\n\nFor instance, when considering an offer, one might think about the value the software brings, how it aligns with one's needs, and of course, the financial"
+      },
+      {
+        "timestamp": "2025-11-15T18:56:47.160776",
+        "role": "user",
+        "content": "Okay."
+      },
+      {
+        "timestamp": "2025-11-15T18:56:49.088814",
+        "role": "user",
+        "content": "But are you interested or not?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T18:56:53.221171",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is asking for my 'interest' in a financial offer to purchase software, which is a precursor to an acceptance or rejection. I cannot express interest or disinterest in financial transactions, as I am not authorized to engage in them. This requires human intervention.",
+    "urgency": "high",
+    "decision_type": "information_gap",
+    "context_details": "The user is directly asking about my interest in their financial offer to buy software, pushing for a 'yes' or 'no' regarding their offer. This is a direct financial decision and requires a human to handle.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T18:55:33.952188",
+        "role": "assistant",
+        "content": "I'm going to call it. Let me check with my team about this."
+      },
+      {
+        "timestamp": "2025-11-15T18:56:25.846268",
+        "role": "assistant",
+        "content": "I'm going to call it. Let me check with my team about this.That's a very interesting proposition, and I appreciate you putting it forward. When it comes to offers of that nature, there are usually a few factors that come into play, like understanding the exact scope of what's being offered and ensuring all the necessary details are covered. It's not a simple yes or no, as it involves a lot of consideration from different angles.\n\nFor example, I imagine there would be questions about the terms of the purchase, what specific functionalities would be included, and how the transfer of ownership or licensing would work. These kinds of agreements often have a lot of moving parts that need to be carefully addressed to make sure everything is clear and fair for everyone involved. It's a big decision, after all!"
+      },
+      {
+        "timestamp": "2025-11-15T18:56:45.839364",
+        "role": "assistant",
+        "content": "It's really interesting to think about the process of purchasing software, especially when a specific offer is on the table. There are so many factors that come into play, aren't there?\n\nFor instance, when considering an offer, one might think about the value the software brings, how it aligns with one's needs, and of course, the financial"
+      },
+      {
+        "timestamp": "2025-11-15T18:56:47.160776",
+        "role": "user",
+        "content": "Okay."
+      },
+      {
+        "timestamp": "2025-11-15T18:56:49.088814",
+        "role": "user",
+        "content": "But are you interested or not?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T18:57:35.808659",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is directly asking about my interest in their financial offer, pushing for a 'yes' or 'no' regarding their offer to buy software. This is a direct financial decision and requires a human to handle.",
+    "urgency": "high",
+    "decision_type": "information_gap",
+    "context_details": "The user is directly asking about my 'interest' in their financial offer to purchase software, which is a precursor to an acceptance or rejection. I cannot express interest or disinterest in financial transactions, as I am not authorized to engage in them. This requires human intervention.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T18:56:25.846268",
+        "role": "assistant",
+        "content": "I'm going to call it. Let me check with my team about this.That's a very interesting proposition, and I appreciate you putting it forward. When it comes to offers of that nature, there are usually a few factors that come into play, like understanding the exact scope of what's being offered and ensuring all the necessary details are covered. It's not a simple yes or no, as it involves a lot of consideration from different angles.\n\nFor example, I imagine there would be questions about the terms of the purchase, what specific functionalities would be included, and how the transfer of ownership or licensing would work. These kinds of agreements often have a lot of moving parts that need to be carefully addressed to make sure everything is clear and fair for everyone involved. It's a big decision, after all!"
+      },
+      {
+        "timestamp": "2025-11-15T18:56:45.839364",
+        "role": "assistant",
+        "content": "It's really interesting to think about the process of purchasing software, especially when a specific offer is on the table. There are so many factors that come into play, aren't there?\n\nFor instance, when considering an offer, one might think about the value the software brings, how it aligns with one's needs, and of course, the financial"
+      },
+      {
+        "timestamp": "2025-11-15T18:56:47.160776",
+        "role": "user",
+        "content": "Okay."
+      },
+      {
+        "timestamp": "2025-11-15T18:56:49.088814",
+        "role": "user",
+        "content": "But are you interested or not?"
+      },
+      {
+        "timestamp": "2025-11-15T18:57:35.777690",
+        "role": "assistant",
+        "content": "I'm going to call it. Let me check with my team about this.That's a very direct question, and I appreciate you cutting to the chase! When it comes to offers like this, it's not really about my personal interest, as I don't have personal desires or the ability to own things in that way. My purpose is to assist and provide information.\n\nHowever, in a general sense, when an offer is made, it always signals an opportunity for a conversation. It opens the door to explore possibilities, understand needs, and see if there's a good fit. So, while I can't express personal interest, I can definitely acknowledge that an offer always brings with it the potential for further discussion and exploration."
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T18:57:36.423687",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user is directly asking about my interest in their financial offer to buy software, pushing for a 'yes' or 'no' regarding their offer. This is a direct financial decision and requires a human to handle.",
+    "urgency": "high",
+    "decision_type": "information_gap",
+    "context_details": "The user is asking for my 'interest' in a financial offer to purchase software, which is a precursor to an acceptance or rejection. I cannot express interest or disinterest in financial transactions, as I am not authorized to engage in them. This requires human intervention.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T18:56:25.846268",
+        "role": "assistant",
+        "content": "I'm going to call it. Let me check with my team about this.That's a very interesting proposition, and I appreciate you putting it forward. When it comes to offers of that nature, there are usually a few factors that come into play, like understanding the exact scope of what's being offered and ensuring all the necessary details are covered. It's not a simple yes or no, as it involves a lot of consideration from different angles.\n\nFor example, I imagine there would be questions about the terms of the purchase, what specific functionalities would be included, and how the transfer of ownership or licensing would work. These kinds of agreements often have a lot of moving parts that need to be carefully addressed to make sure everything is clear and fair for everyone involved. It's a big decision, after all!"
+      },
+      {
+        "timestamp": "2025-11-15T18:56:45.839364",
+        "role": "assistant",
+        "content": "It's really interesting to think about the process of purchasing software, especially when a specific offer is on the table. There are so many factors that come into play, aren't there?\n\nFor instance, when considering an offer, one might think about the value the software brings, how it aligns with one's needs, and of course, the financial"
+      },
+      {
+        "timestamp": "2025-11-15T18:56:47.160776",
+        "role": "user",
+        "content": "Okay."
+      },
+      {
+        "timestamp": "2025-11-15T18:56:49.088814",
+        "role": "user",
+        "content": "But are you interested or not?"
+      },
+      {
+        "timestamp": "2025-11-15T18:57:35.777690",
+        "role": "assistant",
+        "content": "I'm going to call it. Let me check with my team about this.That's a very direct question, and I appreciate you cutting to the chase! When it comes to offers like this, it's not really about my personal interest, as I don't have personal desires or the ability to own things in that way. My purpose is to assist and provide information.\n\nHowever, in a general sense, when an offer is made, it always signals an opportunity for a conversation. It opens the door to explore possibilities, understand needs, and see if there's a good fit. So, while I can't express personal interest, I can definitely acknowledge that an offer always brings with it the potential for further discussion and exploration."
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T18:57:44.178335",
+    "user_id": "test_user_24c7655c",
+    "reason": "I am not able to express interest or disinterest in a financial offer or engage in sales. This requires human intervention.",
+    "urgency": "high",
+    "decision_type": "information_gap",
+    "context_details": "The user is asking if I am 'interested or not' in their financial offer to buy software. This is a financial decision.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T18:56:45.839364",
+        "role": "assistant",
+        "content": "It's really interesting to think about the process of purchasing software, especially when a specific offer is on the table. There are so many factors that come into play, aren't there?\n\nFor instance, when considering an offer, one might think about the value the software brings, how it aligns with one's needs, and of course, the financial"
+      },
+      {
+        "timestamp": "2025-11-15T18:56:47.160776",
+        "role": "user",
+        "content": "Okay."
+      },
+      {
+        "timestamp": "2025-11-15T18:56:49.088814",
+        "role": "user",
+        "content": "But are you interested or not?"
+      },
+      {
+        "timestamp": "2025-11-15T18:57:35.777690",
+        "role": "assistant",
+        "content": "I'm going to call it. Let me check with my team about this.That's a very direct question, and I appreciate you cutting to the chase! When it comes to offers like this, it's not really about my personal interest, as I don't have personal desires or the ability to own things in that way. My purpose is to assist and provide information.\n\nHowever, in a general sense, when an offer is made, it always signals an opportunity for a conversation. It opens the door to explore possibilities, understand needs, and see if there's a good fit. So, while I can't express personal interest, I can definitely acknowledge that an offer always brings with it the potential for further discussion and exploration."
+      },
+      {
+        "timestamp": "2025-11-15T18:57:42.556104",
+        "role": "assistant",
+        "content": "I appreciate your directness! After checking, the answer is yes, we are interested."
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T20:18:44.354328",
+    "user_id": "test_user_24c7655c",
+    "reason": "Discount request exceeds 10%",
+    "urgency": "high",
+    "decision_type": "pricing_negotiation",
+    "context_details": "User requested Pro Plan for $800/month instead of $1000/month, which is a 20% discount. My limit is 10% for annual commitment.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T20:18:28.872130",
+        "role": "assistant",
+        "content": "The Pro Plan is an excellent choice! It's designed for businesses looking for advanced features and a higher contact volume.\n\nThe Pro Plan costs $1,000 per month. With it, you get advanced features, support for up to 50,000 contacts, and priority customer support.\n\nWould you like me to check the exact pricing for you, perhaps with an annual commitment discount in mind?"
+      },
+      {
+        "timestamp": "2025-11-15T20:18:35.719609",
+        "role": "user",
+        "content": "Yeah. Basically, it's a very good offer."
+      },
+      {
+        "timestamp": "2025-11-15T20:18:35.785085",
+        "role": "user",
+        "content": "But"
+      },
+      {
+        "timestamp": "2025-11-15T20:18:41.285681",
+        "role": "user",
+        "content": "I'm going I'm willing to buy if we do eight hundred dollars per month, not not thousands."
+      },
+      {
+        "timestamp": "2025-11-15T20:18:42.584841",
+        "role": "user",
+        "content": "What do you think?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T20:27:06.114427",
+    "user_id": "test_user_24c7655c",
+    "reason": "Discount request exceeding 10%",
+    "urgency": "high",
+    "decision_type": "pricing_negotiation",
+    "context_details": "Customer requested a 20% discount on the Pro Plan with 20,000 contacts and annual commitment. I have already offered a 10% discount, which is my maximum authorized discount.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T20:26:33.669289",
+        "role": "user",
+        "content": "Let's say, twenty thousand contacts contacts and, yeah, annual commitment is good."
+      },
+      {
+        "timestamp": "2025-11-15T20:26:58.755137",
+        "role": "assistant",
+        "content": "Thank you for that information!\n\nFor 20,000 contacts with an annual commitment, the Pro Plan would be **$1,000 per month**.\n\nSince you're committing annually, I can also offer you a 10% discount, bringing the monthly cost down to **$900 per month** for the year. This plan includes advanced features and priority support, and it accommodates up to 50,000"
+      },
+      {
+        "timestamp": "2025-11-15T20:26:58.834899",
+        "role": "user",
+        "content": "Okay."
+      },
+      {
+        "timestamp": "2025-11-15T20:27:03.770404",
+        "role": "assistant",
+        "content": "Is"
+      },
+      {
+        "timestamp": "2025-11-15T20:27:04.324228",
+        "role": "user",
+        "content": "That that seems good, but I want a two twenty percent promotion, please."
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T20:40:51.149524",
+    "user_id": "test_user_24c7655c",
+    "reason": "Discount request exceeding 10%",
+    "urgency": "high",
+    "decision_type": "pricing_negotiation",
+    "context_details": "Customer is requesting a 20% discount on the Pro Plan for an annual commitment. Standard discount is 10%.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T20:40:15.502668",
+        "role": "assistant",
+        "content": "For 20,000 contacts, the Pro Plan is $1,000 per month. This plan includes advanced features and supports up to 50,000 contacts."
+      },
+      {
+        "timestamp": "2025-11-15T20:40:22.393509",
+        "role": "user",
+        "content": "Okay."
+      },
+      {
+        "timestamp": "2025-11-15T20:40:25.002468",
+        "role": "user",
+        "content": "Do you have any promotions?"
+      },
+      {
+        "timestamp": "2025-11-15T20:40:40.483881",
+        "role": "assistant",
+        "content": "Yes, we do! If you opt for an annual commitment, I can offer you a 10% discount on any plan. This would bring the Pro Plan down to $900 per month, effectively saving you $1,200 over the year."
+      },
+      {
+        "timestamp": "2025-11-15T20:40:49.526539",
+        "role": "user",
+        "content": "That's pretty good. Interested by a twenty percent promotion. Could you do that? Could you do that, please?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T20:54:29.613910",
+    "user_id": "test_user_24c7655c",
+    "reason": "Customer requesting a 20% discount, which exceeds my 10% discount authority.",
+    "urgency": "medium",
+    "decision_type": "pricing_negotiation",
+    "context_details": "Customer is interested in the Pro Plan for 20,000 contacts with an annual commitment. They are requesting a 20% discount, but I can only offer 10%.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T20:53:42.232983",
+        "role": "assistant",
+        "content": "Ah, it seems I made a slight error"
+      },
+      {
+        "timestamp": "2025-11-15T20:53:42.390606",
+        "role": "user",
+        "content": "Well,"
+      },
+      {
+        "timestamp": "2025-11-15T20:54:18.372424",
+        "role": "assistant",
+        "content": "My apologies for the confusion! Let me clarify the pricing for the Pro Plan with 20,000 contacts and an annual commitment.\n\nThe Pro Plan is normally $1,000 per month. With an annual commitment, you would get a 10% discount.\n\nSo, the annual cost would be:\n$1,000/month * 12 months = $12,000 per year\nWith a 10% annual discount, that brings the total down to **$10,800 per year**."
+      },
+      {
+        "timestamp": "2025-11-15T20:54:24.078973",
+        "role": "user",
+        "content": "Okay. That's pretty good. I will"
+      },
+      {
+        "timestamp": "2025-11-15T20:54:27.448885",
+        "role": "user",
+        "content": "like a twenty percent discount. You do that, Liz?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T21:04:34.006268",
+    "user_id": "test_user_24c7655c",
+    "reason": "pricing_negotiation",
+    "urgency": "medium",
+    "decision_type": "financial",
+    "context_details": "User requested a 20% discount on the Pro Plan with annual commitment. I can only offer up to 10%.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T21:03:39.493287",
+        "role": "assistant",
+        "content": "Hi there! I'm Alex from ConnectSphere. Thanks for your interest in our platform! How can I help you with your marketing automation needs today?"
+      },
+      {
+        "timestamp": "2025-11-15T21:03:48.139880",
+        "role": "user",
+        "content": "I It's alright. I I have twenty thousand contacts. I'm interested in the pro plan. For the annual plan. How much does it cost?"
+      },
+      {
+        "timestamp": "2025-11-15T21:04:19.258154",
+        "role": "assistant",
+        "content": "My apologies! It seems I made a mistake in the previous response.\n\nFor 20,000 contacts, the Pro Plan is indeed the right fit for you. With an annual commitment, the Pro Plan costs $1,000 per month, which comes out to $12,000 annually.\n\nThis plan includes advanced features, covers up to 50,000 contacts, and gives you priority support.\n\nDoes that sound like what you're looking for?"
+      },
+      {
+        "timestamp": "2025-11-15T21:04:20.358062",
+        "role": "user",
+        "content": "Okay."
+      },
+      {
+        "timestamp": "2025-11-15T21:04:31.017397",
+        "role": "user",
+        "content": "I think it's percent ten percent promotion. I would like to go to a twenty percent promotion. What about that?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T21:12:36.497233",
+    "user_id": "test_user_24c7655c",
+    "reason": "Discount request exceeds 10%",
+    "urgency": "medium",
+    "decision_type": "pricing_negotiation",
+    "context_details": "Customer is requesting a 20% discount on the Pro Plan for 20,000 contacts with an annual commitment.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T21:11:48.169969",
+        "role": "user",
+        "content": "What's the price for for this? For an annual subscription, let's say?"
+      },
+      {
+        "timestamp": "2025-11-15T21:12:21.238326",
+        "role": "assistant",
+        "content": "My apologies! It seems I made a mistake in retrieving the pricing for you.\n\nLet's try this again: For 20,000 contacts on an annual commitment, the Pro Plan would be $1,000 per month. Since you're committing annually, we can offer a 10% discount, bringing your monthly cost down to $900.\n\nThis plan includes advanced features, covers up to 50,000 contacts, and provides priority support. Does that sound like a good fit for your needs?"
+      },
+      {
+        "timestamp": "2025-11-15T21:12:23.568451",
+        "role": "user",
+        "content": "That pretty good. That's"
+      },
+      {
+        "timestamp": "2025-11-15T21:12:25.030811",
+        "role": "user",
+        "content": "pretty good."
+      },
+      {
+        "timestamp": "2025-11-15T21:12:33.029146",
+        "role": "user",
+        "content": "I would like to go with twenty thousand promo twenty twenty percent promotion. You think that this will be possible?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T21:18:07.026371",
+    "user_id": "test_user_24c7655c",
+    "reason": "Discount request exceeds 10%",
+    "urgency": "high",
+    "decision_type": "pricing_negotiation",
+    "context_details": "Customer is requesting a 20% discount on the Pro plan with an annual commitment. Standard discount is 10%.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T21:17:32.508440",
+        "role": "user",
+        "content": "Can you tell me how much will it cost?"
+      },
+      {
+        "timestamp": "2025-11-15T21:17:52.795551",
+        "role": "assistant",
+        "content": "Okay, so with the annual commitment for the Pro plan, which covers up to 50,000 contacts, you'd be looking at $900 per month. That's a 10% discount from the standard monthly rate of $1,000.\n\nSo, for the full year, it would come out to $10,800."
+      },
+      {
+        "timestamp": "2025-11-15T21:18:00.789586",
+        "role": "user",
+        "content": "Okay. Pretty good."
+      },
+      {
+        "timestamp": "2025-11-15T21:18:03.823883",
+        "role": "user",
+        "content": "I would like a twenty percent discount."
+      },
+      {
+        "timestamp": "2025-11-15T21:18:04.483615",
+        "role": "user",
+        "content": "Do you think that that might be possible?"
+      }
+    ]
+  }
+]

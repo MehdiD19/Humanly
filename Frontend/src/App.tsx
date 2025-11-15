@@ -1,8 +1,17 @@
 import { useState } from 'react'
 import AgentVoiceChat from './components/AgentVoiceChat'
 import LandingPage from './components/LandingPage'
+import EscalationDashboard from './components/EscalationDashboard'
 
 function App() {
+  // Check if we're in dashboard mode (via URL or localStorage)
+  const [viewMode, setViewMode] = useState<'chat' | 'dashboard'>(() => {
+    const urlParams = new URLSearchParams(window.location.search)
+    const mode = urlParams.get('mode')
+    if (mode === 'dashboard') return 'dashboard'
+    return 'chat'
+  })
+
   // For demo purposes, use a simple user ID
   // In production, this would come from authentication
   const [userId] = useState(() => {
@@ -24,6 +33,11 @@ function App() {
       setHasStarted(true)
       setIsLoading(false)
     }, 500)
+  }
+
+  // Show dashboard if mode is dashboard
+  if (viewMode === 'dashboard') {
+    return <EscalationDashboard />
   }
 
   return (
