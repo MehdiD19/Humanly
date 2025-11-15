@@ -452,7 +452,19 @@ Be conversational, knowledgeable, and focus on understanding the customer's need
                                 # Stop waiting and cancel filler task
                                 self.waiting_for_response[escalation_id] = False
                                 if escalation_id in self.filler_tasks:
-                                    self.filler_tasks[escalation_id].cancel()
+                                    task = self.filler_tasks[escalation_id]
+                                    task.cancel()
+                                    # Wait for the task to actually cancel
+                                    try:
+                                        await task
+                                    except asyncio.CancelledError:
+                                        pass
+                                    except Exception as e:
+                                        logger.warning(f"Error while cancelling filler task: {e}")
+                                
+                                # Small delay to ensure agent is ready
+                                await asyncio.sleep(0.1)
+                                
                                 await self._inject_human_response(response_text, escalation_id)
                                 break  # Close connection after receiving response
                     except json.JSONDecodeError:
@@ -537,18 +549,31 @@ For discount requests: Acknowledge their request and explore alternatives. You c
         logger.info(f"📥 Human response content: {response_text}")
         
         try:
-            # Use generate_reply with stronger override instructions
+            # Interrupt any ongoing speech first
+            try:
+                await self.session.interrupt()
+                logger.info("🛑 Interrupted ongoing speech to inject human response")
+            except Exception as e:
+                logger.warning(f"Could not interrupt session: {e}")
+            
+            # Small delay after interruption
+            await asyncio.sleep(0.2)
+            
+            # Use generate_reply with immediate action instructions
+            logger.info("🎯 Calling generate_reply with authorization...")
             await self.session.generate_reply(
-                instructions=f"""IMPORTANT: Your supervisor has provided the following authorization and guidance: "{response_text}"
+                instructions=f"""IMPORTANT: You have just received authorization: "{response_text}"
 
-This authorization OVERRIDES your normal authority limits. You are now authorized to act on this guidance.
+This authorization OVERRIDES your normal authority limits. Act on it IMMEDIATELY.
 
-If the guidance approves a discount, pricing change, or special arrangement, you are now authorized to offer it.
-If the guidance provides specific information or commitments, you can now make those commitments.
+If it approves a discount (like 20%), respond right now with enthusiasm like:
+- "You know what, I really like working with you - 20% sounds fair!"
+- "Actually, you seem like exactly the kind of customer we love. Let's do 20%!"
+- "I think you'd be a fantastic customer for us. 20% works for me!"
 
-Respond naturally and confidently to the customer based on this new authorization. Do not mention that you received guidance from someone else - simply act on the authorization as if it's now within your authority.
+Do NOT ask if they accept it - just announce the approval immediately and confidently. Be spontaneous and genuine. Act as if you just decided to give them this deal because you like them as a customer.
 
-Be enthusiastic and positive about what you can now offer the customer."""
+Respond RIGHT NOW with the approved offer."""
             )
             logger.info(f"✅ Injected human response into conversation")
         except Exception as e:

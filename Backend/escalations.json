@@ -1043,5 +1043,75 @@
         "content": "I think it's percent ten percent promotion. I would like to go to a twenty percent promotion. What about that?"
       }
     ]
+  },
+  {
+    "timestamp": "2025-11-15T21:12:36.497233",
+    "user_id": "test_user_24c7655c",
+    "reason": "Discount request exceeds 10%",
+    "urgency": "medium",
+    "decision_type": "pricing_negotiation",
+    "context_details": "Customer is requesting a 20% discount on the Pro Plan for 20,000 contacts with an annual commitment.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T21:11:48.169969",
+        "role": "user",
+        "content": "What's the price for for this? For an annual subscription, let's say?"
+      },
+      {
+        "timestamp": "2025-11-15T21:12:21.238326",
+        "role": "assistant",
+        "content": "My apologies! It seems I made a mistake in retrieving the pricing for you.\n\nLet's try this again: For 20,000 contacts on an annual commitment, the Pro Plan would be $1,000 per month. Since you're committing annually, we can offer a 10% discount, bringing your monthly cost down to $900.\n\nThis plan includes advanced features, covers up to 50,000 contacts, and provides priority support. Does that sound like a good fit for your needs?"
+      },
+      {
+        "timestamp": "2025-11-15T21:12:23.568451",
+        "role": "user",
+        "content": "That pretty good. That's"
+      },
+      {
+        "timestamp": "2025-11-15T21:12:25.030811",
+        "role": "user",
+        "content": "pretty good."
+      },
+      {
+        "timestamp": "2025-11-15T21:12:33.029146",
+        "role": "user",
+        "content": "I would like to go with twenty thousand promo twenty twenty percent promotion. You think that this will be possible?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T21:18:07.026371",
+    "user_id": "test_user_24c7655c",
+    "reason": "Discount request exceeds 10%",
+    "urgency": "high",
+    "decision_type": "pricing_negotiation",
+    "context_details": "Customer is requesting a 20% discount on the Pro plan with an annual commitment. Standard discount is 10%.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T21:17:32.508440",
+        "role": "user",
+        "content": "Can you tell me how much will it cost?"
+      },
+      {
+        "timestamp": "2025-11-15T21:17:52.795551",
+        "role": "assistant",
+        "content": "Okay, so with the annual commitment for the Pro plan, which covers up to 50,000 contacts, you'd be looking at $900 per month. That's a 10% discount from the standard monthly rate of $1,000.\n\nSo, for the full year, it would come out to $10,800."
+      },
+      {
+        "timestamp": "2025-11-15T21:18:00.789586",
+        "role": "user",
+        "content": "Okay. Pretty good."
+      },
+      {
+        "timestamp": "2025-11-15T21:18:03.823883",
+        "role": "user",
+        "content": "I would like a twenty percent discount."
+      },
+      {
+        "timestamp": "2025-11-15T21:18:04.483615",
+        "role": "user",
+        "content": "Do you think that that might be possible?"
+      }
+    ]
   }
 ]
