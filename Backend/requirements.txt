@@ -1,10 +1,11 @@
-# Minimal requirements for simple agent
+# Requirements for STT-LLM-TTS pipeline agent
 
-livekit-agents[google]
+livekit-agents[deepgram,anthropic,elevenlabs]
+livekit-plugins-silero
+livekit-plugins-noise-cancellation
+livekit-plugins-turn-detector
 
 python-dotenv
-
-google-generativeai
 
 supabase>=2.0.0
 

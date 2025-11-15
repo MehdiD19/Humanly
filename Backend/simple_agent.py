@@ -7,16 +7,9 @@ from typing import List, Dict, Any
 from dotenv import load_dotenv
 from pathlib import Path
 
-from livekit.agents import (
-    Agent,
-    AgentSession,
-    JobContext,
-    RoomInputOptions,
-    WorkerOptions,
-    cli,
-)
-from livekit.plugins import google
-import google.generativeai as genai
+from livekit import agents
+from livekit.agents import AgentSession, Agent, WorkerOptions, RoomInputOptions
+from livekit.plugins import noise_cancellation, silero
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -33,49 +26,31 @@ load_dotenv(env_path)
 
 logger.info("=== ENVIRONMENT VARIABLES CHECK ===")
 logger.info(f"GOOGLE_API_KEY: {'✅ SET' if os.getenv('GOOGLE_API_KEY') else '❌ NOT SET'}")
+logger.info(f"DEEPGRAM_API_KEY: {'✅ SET' if os.getenv('DEEPGRAM_API_KEY') else '❌ NOT SET'}")
+logger.info(f"ELEVENLABS_API_KEY: {'✅ SET' if os.getenv('ELEVENLABS_API_KEY') else '❌ NOT SET'}")
 logger.info(f"LIVEKIT_URL: {os.getenv('LIVEKIT_URL', '❌ NOT SET')}")
 logger.info(f"LIVEKIT_API_KEY: {'✅ SET' if os.getenv('LIVEKIT_API_KEY') else '❌ NOT SET'}")
 logger.info(f"LIVEKIT_API_SECRET: {'✅ SET' if os.getenv('LIVEKIT_API_SECRET') else '❌ NOT SET'}")
 logger.info("=====================================")
 
-# Configure Gemini API
-google_api_key = os.getenv('GOOGLE_API_KEY')
-if google_api_key:
-    genai.configure(api_key=google_api_key)
-    logger.info("✅ Gemini API configured")
-else:
-    logger.warning("❌ GOOGLE_API_KEY not found")
 
-
-class SimpleAgent(Agent):
-    """A minimal agent for transcription-based conversations."""
+class Assistant(Agent):
+    """A voice AI assistant using STT-LLM-TTS pipeline."""
     
     def __init__(self, user_id: str = "default_user") -> None:
         self.user_id = user_id
         
-        # Initialize basic instructions
-        instructions = self._get_instructions()
-        
         super().__init__(
-            instructions=instructions,
-            llm=google.beta.realtime.RealtimeModel(
-                model="gemini-2.5-flash-native-audio-preview-09-2025",
-                voice="Zephyr",
-                temperature=0.9,
-                instructions=instructions,
-            ),
+            instructions="""You are a warm and helpful conversation partner. 
+Engage naturally with the user, listen actively, and respond thoughtfully to what they share.
+Be supportive and genuine in your interactions.
+Your responses are concise, to the point, and conversational.
+Avoid complex formatting, punctuation, emojis, asterisks, or other symbols.""",
         )
         
         # Transcript storage
         self.transcript: List[Dict[str, Any]] = []
         self.session_start_time = datetime.now()
-        self.room_name = ""
-    
-    def _get_instructions(self) -> str:
-        """Return basic conversation instructions."""
-        return """You are a warm and helpful conversation partner. 
-Engage naturally with the user, listen actively, and respond thoughtfully to what they share.
-Be supportive and genuine in your interactions."""
     
     async def on_enter(self):
         """Called when the agent enters the room."""
@@ -92,9 +67,6 @@ Be supportive and genuine in your interactions."""
             logger.info("Session closed")
             self._print_transcript()
         
-        # Send greeting
-        logger.info("👋 Sending greeting...")
-        self.session.generate_reply(instructions="Greet the user warmly and naturally. Ask how they're doing.")
         logger.info("✅ Agent initialized")
     
     def _on_conversation_item_added(self, event):
@@ -183,34 +155,44 @@ def get_or_create_test_user_id():
     return user_id
 
 
-async def entrypoint(ctx: JobContext):
+async def entrypoint(ctx: agents.JobContext):
     """Main entry point for the agent."""
-    logger.info("Starting Simple Agent")
-    
-    # Connect to the room
-    await ctx.connect()
+    logger.info("Starting STT-LLM-TTS Pipeline Agent")
+    logger.info("🎤 STT: Deepgram")
+    logger.info("🧠 LLM: Google Gemini")
+    logger.info("🔊 TTS: Eleven Labs")
     
     # Get user ID
     user_id = get_or_create_test_user_id()
     logger.info(f"🆔 User ID: {user_id}")
     
-    # Create and start the agent
-    agent = SimpleAgent(user_id=user_id)
-    agent.ctx = ctx
-    session = AgentSession()
+    # Create agent session with pipeline configuration
+    session = AgentSession(
+        stt="deepgram/nova-3:en",
+        llm="google/gemini-2.5-flash",
+        tts="elevenlabs/eleven_turbo_v2_5:Xb7hH8MSUJpSbSDYk0k2",  # Default voice
+        vad=silero.VAD.load(),
+    )
     
-    try:
-        await session.start(
-            agent=agent,
-            room=ctx.room,
-            room_input_options=RoomInputOptions(
-                video_enabled=True,
-            ),
-        )
-    except Exception as e:
-        logger.error(f"Session error: {e}")
+    # Create the assistant
+    assistant = Assistant(user_id=user_id)
+    
+    # Start the session
+    await session.start(
+        room=ctx.room,
+        agent=assistant,
+        room_input_options=RoomInputOptions(
+            video_enabled=True,
+            noise_cancellation=noise_cancellation.BVC(),
+        ),
+    )
+    
+    # Send initial greeting
+    logger.info("👋 Sending greeting...")
+    await session.generate_reply(
+        instructions="Greet the user warmly and naturally. Ask how they're doing."
+    )
 
 
 if __name__ == "__main__":
-    cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
-
+    agents.cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))

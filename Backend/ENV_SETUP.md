@@ -10,8 +10,13 @@ LIVEKIT_URL=ws://localhost:7880
 LIVEKIT_API_KEY=your_livekit_api_key_here
 LIVEKIT_API_SECRET=your_livekit_api_secret_here
 
-# Google Gemini API (for AI agent)
-GOOGLE_API_KEY=your_google_api_key_here
+# Google_API_KEY=your_google_api_key_here
+
+# Deepgram API (for Speech-to-Text)
+DEEPGRAM_API_KEY=your_deepgram_api_key_here
+
+# Eleven Labs API (for Text-to-Speech)
+ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
 ```
 
 ## Getting LiveKit Credentials
