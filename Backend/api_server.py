@@ -162,6 +162,40 @@ async def respond_to_escalation(escalation_id: str, request: HumanResponseReques
     
     return {"status": "success", "message": "Response submitted"}
 
+@app.delete("/api/escalations/{escalation_id}")
+async def delete_escalation(escalation_id: str):
+    """Delete an escalation. Called by frontend."""
+    if escalation_id not in escalations:
+        raise HTTPException(status_code=404, detail="Escalation not found")
+    
+    escalation = escalations[escalation_id]
+    
+    # Only allow deletion of pending escalations
+    if escalation["status"] != "pending":
+        raise HTTPException(status_code=400, detail="Can only delete pending escalations")
+    
+    # Remove from storage
+    del escalations[escalation_id]
+    
+    logger.info(f"🗑️ Escalation {escalation_id} deleted")
+    
+    # Close agent WebSocket if connected
+    if escalation_id in agent_websockets:
+        try:
+            await agent_websockets[escalation_id].close()
+        except Exception as e:
+            logger.error(f"Failed to close agent WebSocket: {e}")
+        finally:
+            agent_websockets.pop(escalation_id, None)
+    
+    # Notify all frontend clients
+    await broadcast_to_frontend({
+        "type": "escalation_deleted",
+        "escalation_id": escalation_id
+    })
+    
+    return {"status": "success", "message": "Escalation deleted"}
+
 # ==================== WEBSOCKET ENDPOINTS ====================
 
 async def broadcast_to_frontend(message: dict):

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { Trash2 } from 'lucide-react'
 
 interface Escalation {
   escalation_id: string
@@ -55,6 +56,14 @@ export default function EscalationDashboard() {
           )
           if (selectedEscalation?.escalation_id === data.escalation_id) {
             setSelectedEscalation(data.escalation)
+          }
+        } else if (data.type === 'escalation_deleted') {
+          setEscalations(prev =>
+            prev.filter(e => e.escalation_id !== data.escalation_id)
+          )
+          if (selectedEscalation?.escalation_id === data.escalation_id) {
+            setSelectedEscalation(null)
+            setResponseText('')
           }
         }
       } catch (error) {
@@ -144,6 +153,38 @@ export default function EscalationDashboard() {
       alert('Failed to submit response. Please try again.')
     } finally {
       setIsSubmitting(false)
+    }
+  }
+
+  const handleDeleteEscalation = async (escalationId: string, e: React.MouseEvent) => {
+    e.stopPropagation() // Prevent selecting the escalation when clicking delete
+    
+    if (!confirm('Are you sure you want to delete this escalation?')) {
+      return
+    }
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/escalations/${escalationId}`,
+        {
+          method: 'DELETE',
+        }
+      )
+
+      if (response.ok) {
+        // Remove from local state immediately
+        setEscalations(prev => prev.filter(e => e.escalation_id !== escalationId))
+        if (selectedEscalation?.escalation_id === escalationId) {
+          setSelectedEscalation(null)
+          setResponseText('')
+        }
+      } else {
+        const error = await response.json()
+        alert(`Error: ${error.detail || 'Failed to delete escalation'}`)
+      }
+    } catch (error) {
+      console.error('Error deleting escalation:', error)
+      alert('Failed to delete escalation. Please try again.')
     }
   }
 
@@ -242,6 +283,13 @@ export default function EscalationDashboard() {
                             Room: {escalation.room_name} • User: {escalation.user_id}
                           </p>
                         </div>
+                        <button
+                          onClick={(e) => handleDeleteEscalation(escalation.escalation_id, e)}
+                          className="ml-4 p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                          title="Delete escalation"
+                        >
+                          <Trash2 size={18} />
+                        </button>
                       </div>
                     </div>
                   ))}

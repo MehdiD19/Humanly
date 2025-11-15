@@ -868,5 +868,180 @@
         "content": "I appreciate your directness! After checking, the answer is yes, we are interested."
       }
     ]
+  },
+  {
+    "timestamp": "2025-11-15T20:18:44.354328",
+    "user_id": "test_user_24c7655c",
+    "reason": "Discount request exceeds 10%",
+    "urgency": "high",
+    "decision_type": "pricing_negotiation",
+    "context_details": "User requested Pro Plan for $800/month instead of $1000/month, which is a 20% discount. My limit is 10% for annual commitment.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T20:18:28.872130",
+        "role": "assistant",
+        "content": "The Pro Plan is an excellent choice! It's designed for businesses looking for advanced features and a higher contact volume.\n\nThe Pro Plan costs $1,000 per month. With it, you get advanced features, support for up to 50,000 contacts, and priority customer support.\n\nWould you like me to check the exact pricing for you, perhaps with an annual commitment discount in mind?"
+      },
+      {
+        "timestamp": "2025-11-15T20:18:35.719609",
+        "role": "user",
+        "content": "Yeah. Basically, it's a very good offer."
+      },
+      {
+        "timestamp": "2025-11-15T20:18:35.785085",
+        "role": "user",
+        "content": "But"
+      },
+      {
+        "timestamp": "2025-11-15T20:18:41.285681",
+        "role": "user",
+        "content": "I'm going I'm willing to buy if we do eight hundred dollars per month, not not thousands."
+      },
+      {
+        "timestamp": "2025-11-15T20:18:42.584841",
+        "role": "user",
+        "content": "What do you think?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T20:27:06.114427",
+    "user_id": "test_user_24c7655c",
+    "reason": "Discount request exceeding 10%",
+    "urgency": "high",
+    "decision_type": "pricing_negotiation",
+    "context_details": "Customer requested a 20% discount on the Pro Plan with 20,000 contacts and annual commitment. I have already offered a 10% discount, which is my maximum authorized discount.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T20:26:33.669289",
+        "role": "user",
+        "content": "Let's say, twenty thousand contacts contacts and, yeah, annual commitment is good."
+      },
+      {
+        "timestamp": "2025-11-15T20:26:58.755137",
+        "role": "assistant",
+        "content": "Thank you for that information!\n\nFor 20,000 contacts with an annual commitment, the Pro Plan would be **$1,000 per month**.\n\nSince you're committing annually, I can also offer you a 10% discount, bringing the monthly cost down to **$900 per month** for the year. This plan includes advanced features and priority support, and it accommodates up to 50,000"
+      },
+      {
+        "timestamp": "2025-11-15T20:26:58.834899",
+        "role": "user",
+        "content": "Okay."
+      },
+      {
+        "timestamp": "2025-11-15T20:27:03.770404",
+        "role": "assistant",
+        "content": "Is"
+      },
+      {
+        "timestamp": "2025-11-15T20:27:04.324228",
+        "role": "user",
+        "content": "That that seems good, but I want a two twenty percent promotion, please."
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T20:40:51.149524",
+    "user_id": "test_user_24c7655c",
+    "reason": "Discount request exceeding 10%",
+    "urgency": "high",
+    "decision_type": "pricing_negotiation",
+    "context_details": "Customer is requesting a 20% discount on the Pro Plan for an annual commitment. Standard discount is 10%.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T20:40:15.502668",
+        "role": "assistant",
+        "content": "For 20,000 contacts, the Pro Plan is $1,000 per month. This plan includes advanced features and supports up to 50,000 contacts."
+      },
+      {
+        "timestamp": "2025-11-15T20:40:22.393509",
+        "role": "user",
+        "content": "Okay."
+      },
+      {
+        "timestamp": "2025-11-15T20:40:25.002468",
+        "role": "user",
+        "content": "Do you have any promotions?"
+      },
+      {
+        "timestamp": "2025-11-15T20:40:40.483881",
+        "role": "assistant",
+        "content": "Yes, we do! If you opt for an annual commitment, I can offer you a 10% discount on any plan. This would bring the Pro Plan down to $900 per month, effectively saving you $1,200 over the year."
+      },
+      {
+        "timestamp": "2025-11-15T20:40:49.526539",
+        "role": "user",
+        "content": "That's pretty good. Interested by a twenty percent promotion. Could you do that? Could you do that, please?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T20:54:29.613910",
+    "user_id": "test_user_24c7655c",
+    "reason": "Customer requesting a 20% discount, which exceeds my 10% discount authority.",
+    "urgency": "medium",
+    "decision_type": "pricing_negotiation",
+    "context_details": "Customer is interested in the Pro Plan for 20,000 contacts with an annual commitment. They are requesting a 20% discount, but I can only offer 10%.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T20:53:42.232983",
+        "role": "assistant",
+        "content": "Ah, it seems I made a slight error"
+      },
+      {
+        "timestamp": "2025-11-15T20:53:42.390606",
+        "role": "user",
+        "content": "Well,"
+      },
+      {
+        "timestamp": "2025-11-15T20:54:18.372424",
+        "role": "assistant",
+        "content": "My apologies for the confusion! Let me clarify the pricing for the Pro Plan with 20,000 contacts and an annual commitment.\n\nThe Pro Plan is normally $1,000 per month. With an annual commitment, you would get a 10% discount.\n\nSo, the annual cost would be:\n$1,000/month * 12 months = $12,000 per year\nWith a 10% annual discount, that brings the total down to **$10,800 per year**."
+      },
+      {
+        "timestamp": "2025-11-15T20:54:24.078973",
+        "role": "user",
+        "content": "Okay. That's pretty good. I will"
+      },
+      {
+        "timestamp": "2025-11-15T20:54:27.448885",
+        "role": "user",
+        "content": "like a twenty percent discount. You do that, Liz?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-15T21:04:34.006268",
+    "user_id": "test_user_24c7655c",
+    "reason": "pricing_negotiation",
+    "urgency": "medium",
+    "decision_type": "financial",
+    "context_details": "User requested a 20% discount on the Pro Plan with annual commitment. I can only offer up to 10%.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T21:03:39.493287",
+        "role": "assistant",
+        "content": "Hi there! I'm Alex from ConnectSphere. Thanks for your interest in our platform! How can I help you with your marketing automation needs today?"
+      },
+      {
+        "timestamp": "2025-11-15T21:03:48.139880",
+        "role": "user",
+        "content": "I It's alright. I I have twenty thousand contacts. I'm interested in the pro plan. For the annual plan. How much does it cost?"
+      },
+      {
+        "timestamp": "2025-11-15T21:04:19.258154",
+        "role": "assistant",
+        "content": "My apologies! It seems I made a mistake in the previous response.\n\nFor 20,000 contacts, the Pro Plan is indeed the right fit for you. With an annual commitment, the Pro Plan costs $1,000 per month, which comes out to $12,000 annually.\n\nThis plan includes advanced features, covers up to 50,000 contacts, and gives you priority support.\n\nDoes that sound like what you're looking for?"
+      },
+      {
+        "timestamp": "2025-11-15T21:04:20.358062",
+        "role": "user",
+        "content": "Okay."
+      },
+      {
+        "timestamp": "2025-11-15T21:04:31.017397",
+        "role": "user",
+        "content": "I think it's percent ten percent promotion. I would like to go to a twenty percent promotion. What about that?"
+      }
+    ]
   }
 ]
