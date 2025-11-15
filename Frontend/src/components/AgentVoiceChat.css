@@ -7,7 +7,7 @@
   padding: 2rem;
   background: var(--bg-white);
   position: relative;
-  overflow-y: auto;
+  overflow: hidden;
   box-sizing: border-box;
 }
 
