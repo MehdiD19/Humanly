@@ -4,6 +4,7 @@ import logging
 import os
 import json
 import asyncio
+import random
 import httpx
 import websockets
 from datetime import datetime
@@ -13,10 +14,14 @@ from pathlib import Path
 
 from livekit import agents
 from livekit.agents import AgentSession, Agent, WorkerOptions, RoomInputOptions, function_tool, RunContext
-from livekit.plugins import noise_cancellation, silero
+from livekit.plugins import noise_cancellation, silero, elevenlabs
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 logger = logging.getLogger("simple-agent")
 
 # Reduce noise from verbose libraries
@@ -62,7 +67,13 @@ escalate_to_human function. This includes:
 - Authorization requests (payments, contracts, sensitive actions)
 - Questions you cannot confidently answer
 - Sensitive personal, medical, or legal matters
-- High-stakes decisions that could have significant consequences""",
+- High-stakes decisions that could have significant consequences
+
+When you use escalate_to_human, maintain a natural, thinking tone. Act as if you're 
+carefully considering the situation and processing information, not just waiting silently. 
+Use natural language that shows you're actively thinking about the problem, like 
+"Let me think about this..." or "I'm considering the best approach..." This keeps the 
+conversation flowing naturally while waiting for guidance.""",
         )
         
         # Transcript storage
@@ -237,7 +248,15 @@ escalate_to_human function. This includes:
             # Connect to WebSocket to receive response
             asyncio.create_task(self._connect_escalation_websocket(escalation_id))
         
-        return f"I've flagged this for human assistance. This has been recorded as a {urgency} priority {decision_type} escalation. I'm waiting for guidance from a human operator."
+        # Return a natural, thinking-like response
+        thinking_phrases = [
+            "Hmm, this is an important decision. Let me think about the best way to help you with this.",
+            "I want to make sure I give you the right guidance here. Let me consider this carefully.",
+            "This requires some careful thought. Give me a moment to process the best approach.",
+            "I'm thinking through the best way to assist you with this situation.",
+            "Let me take a moment to consider this properly before responding."
+        ]
+        return random.choice(thinking_phrases)
     
     async def _send_escalation_to_api(self, reason: str, urgency: str, decision_type: str, 
                                       context_details: str, recent_transcript: List[Dict]) -> Optional[str]:
@@ -270,12 +289,29 @@ escalate_to_human function. This includes:
         ws_url = API_BASE_URL.replace("http://", "ws://").replace("https://", "wss://")
         ws_path = f"/ws/agent/{escalation_id}"
         
+        # Thinking phrases to use while waiting
+        thinking_phrases = [
+            "Just a moment while I think this through...",
+            "I'm still considering the best approach here...",
+            "Let me make sure I have the right information...",
+            "Taking a bit more time to process this...",
+            "I'm working through the details..."
+        ]
+        
         try:
             async with websockets.connect(f"{ws_url}{ws_path}") as websocket:
                 self.escalation_websockets[escalation_id] = websocket
                 logger.info(f"🔌 Connected to WebSocket for escalation {escalation_id}")
                 
+                # Start a task to send periodic "thinking" messages while waiting
+                thinking_task = None
+                if self.session:
+                    thinking_task = asyncio.create_task(
+                        self._send_thinking_messages(escalation_id, thinking_phrases)
+                    )
+                
                 # Listen for responses
+                response_received = False
                 async for message in websocket:
                     try:
                         data = json.loads(message)
@@ -285,10 +321,28 @@ escalate_to_human function. This includes:
                             
                             if response_text and escalation_id_received == escalation_id:
                                 logger.info(f"📨 Received human response for {escalation_id}")
+                                response_received = True
+                                
+                                # Cancel thinking messages task
+                                if thinking_task:
+                                    thinking_task.cancel()
+                                    try:
+                                        await thinking_task
+                                    except asyncio.CancelledError:
+                                        pass
+                                
                                 await self._inject_human_response(response_text, escalation_id)
                                 break  # Close connection after receiving response
                     except json.JSONDecodeError:
                         continue
+                
+                # Cancel thinking task if still running
+                if thinking_task and not response_received:
+                    thinking_task.cancel()
+                    try:
+                        await thinking_task
+                    except asyncio.CancelledError:
+                        pass
                         
         except websockets.exceptions.ConnectionClosed:
             logger.info(f"🔌 WebSocket closed for escalation {escalation_id}")
@@ -297,6 +351,43 @@ escalate_to_human function. This includes:
         finally:
             self.escalation_websockets.pop(escalation_id, None)
             self.pending_escalations.pop(escalation_id, None)
+    
+    async def _send_thinking_messages(self, escalation_id: str, thinking_phrases: List[str]):
+        """Send periodic thinking messages while waiting for human response."""
+        if not self.session or escalation_id not in self.pending_escalations:
+            return
+        
+        wait_intervals = [8, 12, 15]  # Wait 8-15 seconds between messages
+        
+        try:
+            message_count = 0
+            while escalation_id in self.pending_escalations:
+                # Wait before sending next thinking message
+                wait_time = random.choice(wait_intervals)
+                await asyncio.sleep(wait_time)
+                
+                # Check if still waiting
+                if escalation_id not in self.pending_escalations:
+                    break
+                
+                # Send a thinking message
+                phrase = random.choice(thinking_phrases)
+                try:
+                    await self.session.say(phrase, allow_interruptions=True)
+                    message_count += 1
+                    logger.info(f"💭 Sent thinking message #{message_count} for escalation {escalation_id}")
+                    
+                    # Limit to 3 thinking messages max to avoid being too chatty
+                    if message_count >= 3:
+                        break
+                except Exception as e:
+                    logger.warning(f"Could not send thinking message: {e}")
+                    break
+                    
+        except asyncio.CancelledError:
+            logger.info(f"Thinking messages cancelled for escalation {escalation_id}")
+        except Exception as e:
+            logger.error(f"Error in thinking messages task: {e}")
     
     async def _inject_human_response(self, response_text: str, escalation_id: str):
         """Inject human response into the conversation."""
@@ -413,6 +504,11 @@ def get_or_create_test_user_id():
 
 async def entrypoint(ctx: agents.JobContext):
     """Main entry point for the agent."""
+    logger.info("="*60)
+    logger.info("🚀 AGENT ENTRYPOINT CALLED")
+    logger.info("="*60)
+    logger.info(f"Room: {ctx.room.name}")
+    logger.info(f"Room SID: {ctx.room.sid}")
     logger.info("Starting STT-LLM-TTS Pipeline Agent")
     logger.info("🎤 STT: Deepgram")
     logger.info("🧠 LLM: Google Gemini")
@@ -422,33 +518,104 @@ async def entrypoint(ctx: agents.JobContext):
     user_id = get_or_create_test_user_id()
     logger.info(f"🆔 User ID: {user_id}")
     
+    # Create enhanced ElevenLabs TTS with optimized voice settings
+    # Voice settings explained:
+    # - stability: Controls voice consistency (0.0-1.0). Higher = more consistent, lower = more expressive
+    # - similarity_boost: How closely the voice matches the original (0.0-1.0). Higher = closer match
+    # - style: Controls style exaggeration (0.0-1.0). Higher = more expressive
+    # - use_speaker_boost: Enhances speaker clarity and presence
+    # - model: Use "eleven_multilingual_v2" for better quality, or "eleven_turbo_v2_5" for lower latency
+    # - voice_id: You can change this to any ElevenLabs voice ID from their library
+    
+    # Use LiveKit Inference format for reliable connection
+    # This format is managed by LiveKit and doesn't require direct API key configuration
+    # Voice ID: iP95p4xoKVk53GoZ742B = Chris (Natural and real American male)
+    enhanced_tts = "elevenlabs/eleven_turbo_v2_5:iP95p4xoKVk53GoZ742B"
+    logger.info("✅ Using ElevenLabs TTS via LiveKit Inference (Chris voice)")
+    
+    # NOTE: To use enhanced voice settings with the plugin, uncomment below and set ELEVENLABS_API_KEY
+    # elevenlabs_api_key = os.getenv("ELEVENLABS_API_KEY") or os.getenv("ELEVEN_API_KEY")
+    # if elevenlabs_api_key:
+    #     try:
+    #         enhanced_tts = elevenlabs.TTS(
+    #             voice_id="iP95p4xoKVk53GoZ742B",
+    #             model="eleven_turbo_v2_5",
+    #             voice_settings=elevenlabs.VoiceSettings(
+    #                 stability=0.5,
+    #                 similarity_boost=0.75,
+    #                 style=0.0,
+    #                 use_speaker_boost=True,
+    #                 speed=1.0,
+    #             ),
+    #             streaming_latency=2,
+    #         )
+    #         logger.info("✅ Using enhanced ElevenLabs TTS with voice settings")
+    #     except Exception as e:
+    #         logger.warning(f"⚠️ Enhanced TTS failed, using Inference format: {e}")
+    #         enhanced_tts = "elevenlabs/eleven_turbo_v2_5:iP95p4xoKVk53GoZ742B"
+    
+    # Alternative voice options (uncomment to try different voices):
+    # - "iP95p4xoKVk53GoZ742B" - Chris: Natural and real American male
+    # - "cgSgspJ2msm6clMCkdW9" - Jessica: Young and popular, playful American female
+    # - "cjVigY5qzO86Huf0OWal" - Eric: A smooth tenor Mexican male
+    
     # Create agent session with pipeline configuration
-    session = AgentSession(
-        stt="deepgram/nova-3:en",
-        llm="google/gemini-2.5-flash",
-        tts="elevenlabs/eleven_turbo_v2_5:Xb7hH8MSUJpSbSDYk0k2",  # Default voice
-        vad=silero.VAD.load(),
-    )
+    try:
+        logger.info(f"🎙️ Initializing TTS: {type(enhanced_tts).__name__}")
+        session = AgentSession(
+            stt="deepgram/nova-3:en",
+            llm="google/gemini-2.5-flash",
+            tts=enhanced_tts,  # Using enhanced TTS configuration
+            vad=silero.VAD.load(),
+        )
+        logger.info("✅ AgentSession created successfully")
+    except Exception as e:
+        logger.error(f"❌ Failed to create AgentSession: {e}")
+        import traceback
+        traceback.print_exc()
+        raise
     
     # Create the assistant with room name
     assistant = Assistant(user_id=user_id, room_name=ctx.room.name)
     
     # Start the session
-    await session.start(
-        room=ctx.room,
-        agent=assistant,
-        room_input_options=RoomInputOptions(
-            video_enabled=True,
-            noise_cancellation=noise_cancellation.BVC(),
-        ),
-    )
+    try:
+        logger.info(f"🚀 Starting session in room: {ctx.room.name}")
+        await session.start(
+            room=ctx.room,
+            agent=assistant,
+            room_input_options=RoomInputOptions(
+                video_enabled=True,
+                noise_cancellation=noise_cancellation.BVC(),
+            ),
+        )
+        logger.info("✅ Session started successfully")
+    except Exception as e:
+        logger.error(f"❌ Failed to start session: {e}")
+        import traceback
+        traceback.print_exc()
+        raise
     
     # Send initial greeting
-    logger.info("👋 Sending greeting...")
-    await session.generate_reply(
-        instructions="Greet the user warmly and naturally. Ask how they're doing."
-    )
+    try:
+        logger.info("👋 Sending greeting...")
+        await session.generate_reply(
+            instructions="Greet the user warmly and naturally. Ask how they're doing."
+        )
+        logger.info("✅ Greeting sent successfully")
+    except Exception as e:
+        logger.error(f"❌ Failed to send greeting: {e}")
+        # Don't raise - greeting failure shouldn't prevent connection
 
 
 if __name__ == "__main__":
-    agents.cli.run_app(WorkerOptions(entrypoint_fnc=entrypoint))
+    # Configure worker options
+    worker_options = WorkerOptions(
+        entrypoint_fnc=entrypoint,
+    )
+    
+    logger.info("🚀 Starting LiveKit Agent Worker")
+    logger.info("📝 Use 'python simple_agent.py dev' for development mode with better logs")
+    logger.info("📝 Use 'python simple_agent.py start' for production mode")
+    
+    agents.cli.run_app(worker_options)
