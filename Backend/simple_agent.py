@@ -2,13 +2,14 @@
 
 import logging
 import os
+import json
 from datetime import datetime
 from typing import List, Dict, Any
 from dotenv import load_dotenv
 from pathlib import Path
 
 from livekit import agents
-from livekit.agents import AgentSession, Agent, WorkerOptions, RoomInputOptions
+from livekit.agents import AgentSession, Agent, WorkerOptions, RoomInputOptions, function_tool, RunContext
 from livekit.plugins import noise_cancellation, silero
 
 # Configure logging
@@ -35,7 +36,7 @@ logger.info("=====================================")
 
 
 class Assistant(Agent):
-    """A voice AI assistant using STT-LLM-TTS pipeline."""
+    """A voice AI assistant using STT-LLM-TTS pipeline with human escalation detection."""
     
     def __init__(self, user_id: str = "default_user") -> None:
         self.user_id = user_id
@@ -45,12 +46,24 @@ class Assistant(Agent):
 Engage naturally with the user, listen actively, and respond thoughtfully to what they share.
 Be supportive and genuine in your interactions.
 Your responses are concise, to the point, and conversational.
-Avoid complex formatting, punctuation, emojis, asterisks, or other symbols.""",
+Avoid complex formatting, punctuation, emojis, asterisks, or other symbols.
+
+IMPORTANT: When you encounter situations that require human decision-making, authorization, 
+or when you lack critical information to properly assist the user, you MUST use the 
+escalate_to_human function. This includes:
+- Financial decisions or offers (e.g., "Do you accept the 10,000 euro offer?")
+- Authorization requests (payments, contracts, sensitive actions)
+- Questions you cannot confidently answer
+- Sensitive personal, medical, or legal matters
+- High-stakes decisions that could have significant consequences""",
         )
         
         # Transcript storage
         self.transcript: List[Dict[str, Any]] = []
         self.session_start_time = datetime.now()
+        
+        # Escalation tracking
+        self.escalations: List[Dict[str, Any]] = []
     
     async def on_enter(self):
         """Called when the agent enters the room."""
@@ -122,10 +135,139 @@ Avoid complex formatting, punctuation, emojis, asterisks, or other symbols.""",
         logger.info(f"Session duration: {duration:.2f} minutes")
         logger.info("="*60 + "\n")
     
+    @function_tool()
+    async def escalate_to_human(
+        self,
+        context: RunContext,
+        reason: str,
+        urgency: str,
+        decision_type: str,
+        context_details: str = ""
+    ):
+        """Flag a moment in the conversation that requires human intervention or decision-making.
+        
+        Use this function when you encounter:
+        - Financial decisions (accepting offers, authorizing payments, budget approvals)
+        - Authorization requests (signing contracts, approving transactions)
+        - Information gaps where you lack critical knowledge to help the user
+        - Sensitive topics (medical, legal, personal matters requiring professional judgment)
+        - High-stakes decisions with significant consequences
+        - User explicitly requesting to speak with a human
+        
+        Args:
+            reason: Clear explanation of why human intervention is needed (2-3 sentences)
+            urgency: How urgent this escalation is - must be one of: "low", "medium", "high", "critical"
+            decision_type: Category of the escalation - must be one of: 
+                          "financial", "authorization", "information_gap", "sensitive_topic", "user_request"
+            context_details: Additional relevant details or information (optional)
+        
+        Returns:
+            Confirmation that the escalation has been logged
+        """
+        
+        # Validate urgency
+        valid_urgency = ["low", "medium", "high", "critical"]
+        if urgency.lower() not in valid_urgency:
+            urgency = "medium"  # Default fallback
+        
+        # Validate decision type
+        valid_types = ["financial", "authorization", "information_gap", "sensitive_topic", "user_request"]
+        if decision_type.lower() not in valid_types:
+            decision_type = "information_gap"  # Default fallback
+        
+        # Create escalation record
+        escalation = {
+            "timestamp": datetime.now().isoformat(),
+            "user_id": self.user_id,
+            "reason": reason,
+            "urgency": urgency.lower(),
+            "decision_type": decision_type.lower(),
+            "context_details": context_details,
+            "recent_transcript": self.transcript[-5:] if len(self.transcript) >= 5 else self.transcript,
+        }
+        
+        # Store escalation
+        self.escalations.append(escalation)
+        
+        # Log the escalation prominently
+        logger.warning("\n" + "="*80)
+        logger.warning("🚨 HUMAN ESCALATION DETECTED 🚨")
+        logger.warning("="*80)
+        logger.warning(f"User ID: {self.user_id}")
+        logger.warning(f"Urgency: {urgency.upper()}")
+        logger.warning(f"Type: {decision_type}")
+        logger.warning(f"Reason: {reason}")
+        if context_details:
+            logger.warning(f"Details: {context_details}")
+        logger.warning("-" * 80)
+        logger.warning("Recent conversation context:")
+        for msg in escalation["recent_transcript"]:
+            logger.warning(f"  [{msg['role'].upper()}] {msg['content'][:100]}")
+        logger.warning("="*80 + "\n")
+        
+        # Save to file for persistence
+        self._save_escalation_to_file(escalation)
+        
+        # TODO: In production, you would:
+        # - Send webhook notification
+        # - Store in database
+        # - Trigger alert to human operator
+        # - Update dashboard
+        # - Send to message queue (e.g., RabbitMQ, Redis)
+        
+        return f"I've flagged this for human assistance. This has been recorded as a {urgency} priority {decision_type} escalation."
+    
+    def _save_escalation_to_file(self, escalation: Dict[str, Any]):
+        """Save escalation to a JSON file for review."""
+        try:
+            escalations_file = Path(__file__).parent / "escalations.json"
+            
+            # Load existing escalations
+            existing_escalations = []
+            if escalations_file.exists():
+                try:
+                    with open(escalations_file, 'r') as f:
+                        existing_escalations = json.load(f)
+                except json.JSONDecodeError:
+                    existing_escalations = []
+            
+            # Append new escalation
+            existing_escalations.append(escalation)
+            
+            # Save back to file
+            with open(escalations_file, 'w') as f:
+                json.dump(existing_escalations, f, indent=2)
+            
+            logger.info(f"✅ Escalation saved to {escalations_file}")
+        except Exception as e:
+            logger.error(f"❌ Failed to save escalation to file: {e}")
+    
     async def on_session_end(self):
         """Called when the session ends."""
         logger.info("Session ending")
         self._print_transcript()
+        self._print_escalations_summary()
+    
+    def _print_escalations_summary(self):
+        """Print summary of all escalations during the session."""
+        if not self.escalations:
+            return
+        
+        logger.info("\n" + "="*40)
+        logger.info("🚨 ESCALATIONS SUMMARY")
+        logger.info("="*40)
+        logger.info(f"Total escalations: {len(self.escalations)}")
+        
+        for idx, escalation in enumerate(self.escalations, 1):
+            logger.info(f"\n--- Escalation #{idx} ---")
+            logger.info(f"Time: {escalation['timestamp']}")
+            logger.info(f"Urgency: {escalation['urgency'].upper()}")
+            logger.info(f"Type: {escalation['decision_type']}")
+            logger.info(f"Reason: {escalation['reason']}")
+            if escalation['context_details']:
+                logger.info(f"Details: {escalation['context_details']}")
+        
+        logger.info("="*60 + "\n")
 
 
 def get_or_create_test_user_id():

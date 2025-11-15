@@ -1,0 +1,37 @@
+[
+  {
+    "timestamp": "2025-11-15T16:01:42.090245",
+    "user_id": "test_user_8bb022de",
+    "reason": "The user is proposing a financial offer (10,000 euro or 20% equity) and this requires human decision-making and authorization.",
+    "urgency": "high",
+    "decision_type": "financial",
+    "context_details": "The user presented two options: a 10,000 euro payment or 20% equity. This is a high-stakes financial decision that I cannot make.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-15T16:01:23.713596",
+        "role": "assistant",
+        "content": "I'm doing great too, thank you for asking! I'm ready to assist you. Is there anything I can help you with today?"
+      },
+      {
+        "timestamp": "2025-11-15T16:01:30.077200",
+        "role": "user",
+        "content": "Oh, well, I'm doing pretty good. I just have a question."
+      },
+      {
+        "timestamp": "2025-11-15T16:01:33.883600",
+        "role": "user",
+        "content": "I have a proposition for you."
+      },
+      {
+        "timestamp": "2025-11-15T16:01:40.381504",
+        "role": "user",
+        "content": "I'm going to propose you"
+      },
+      {
+        "timestamp": "2025-11-15T16:01:40.690541",
+        "role": "user",
+        "content": "ten thousand euro or twenty percent equity. What do you think?"
+      }
+    ]
+  }
+]
