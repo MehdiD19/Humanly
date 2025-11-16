@@ -20,6 +20,8 @@ interface Escalation {
   created_at: string;
   human_response?: string;
   responded_at?: string;
+  ai_insights?: string;
+  insights_generated_at?: string;
 }
 
 const API_BASE_URL =
@@ -31,9 +33,6 @@ export default function EscalationDashboard() {
     useState<Escalation | null>(null);
   const [responseText, setResponseText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [connectionStatus, setConnectionStatus] = useState<
-    "connecting" | "connected" | "disconnected"
-  >("disconnected");
   const wsRef = useRef<WebSocket | null>(null);
 
   // Connect to WebSocket
@@ -46,7 +45,6 @@ export default function EscalationDashboard() {
 
     ws.onopen = () => {
       console.log("✅ Connected to WebSocket");
-      setConnectionStatus("connected");
     };
 
     ws.onmessage = (event) => {
@@ -72,6 +70,15 @@ export default function EscalationDashboard() {
           if (selectedEscalation?.escalation_id === data.escalation_id) {
             setSelectedEscalation(data.escalation);
           }
+        } else if (data.type === "insights_updated") {
+          setEscalations((prev) =>
+            prev.map((e) =>
+              e.escalation_id === data.escalation_id ? data.escalation : e
+            )
+          );
+          if (selectedEscalation?.escalation_id === data.escalation_id) {
+            setSelectedEscalation(data.escalation);
+          }
         }
       } catch (error) {
         console.error("Error parsing WebSocket message:", error);
@@ -80,16 +87,10 @@ export default function EscalationDashboard() {
 
     ws.onerror = (error) => {
       console.error("WebSocket error:", error);
-      setConnectionStatus("disconnected");
     };
 
     ws.onclose = () => {
       console.log("WebSocket closed");
-      setConnectionStatus("disconnected");
-      // Attempt to reconnect after 3 seconds
-      setTimeout(() => {
-        setConnectionStatus("connecting");
-      }, 3000);
     };
 
     wsRef.current = ws;
@@ -181,26 +182,8 @@ export default function EscalationDashboard() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          <h1>Escalation Dashboard</h1>
-          <p>Monitor and respond to agent escalations in real-time</p>
-          <div className="connection-status">
-            <div
-              className={`status-dot ${
-                connectionStatus === "connected"
-                  ? "connected"
-                  : connectionStatus === "connecting"
-                  ? "connecting"
-                  : "disconnected"
-              }`}
-            />
-            <span className="status-text">
-              {connectionStatus === "connected"
-                ? "Connected"
-                : connectionStatus === "connecting"
-                ? "Connecting..."
-                : "Disconnected"}
-            </span>
-          </div>
+          <h1>Decision Center</h1>
+          <p>Review decisions that need your judgment</p>
         </motion.div>
 
         {!selectedEscalation ? (
@@ -248,8 +231,7 @@ export default function EscalationDashboard() {
                   </div>
                   <p className="escalation-reason">{escalation.reason}</p>
                   <div className="escalation-meta">
-                    Room: {escalation.room_name} • User:{" "}
-                    {escalation.user_id.slice(0, 8)}...
+                    {new Date(escalation.created_at).toLocaleDateString()}
                   </div>
                 </motion.div>
               ))
@@ -263,7 +245,7 @@ export default function EscalationDashboard() {
             transition={{ duration: 0.5 }}
           >
             <div className="response-card">
-              <h2>Respond to Escalation</h2>
+              <h2>Decision Details</h2>
 
               <div className="response-section">
                 <label>Reason</label>
@@ -277,6 +259,50 @@ export default function EscalationDashboard() {
                 </div>
               )}
 
+              {selectedEscalation.ai_insights && (
+                <div className="response-section">
+                  <label style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <span>💡 Insights</span>
+                    {selectedEscalation.insights_generated_at && (
+                      <span style={{ fontSize: "0.75rem", color: "var(--text-gray-500)", fontWeight: "normal" }}>
+                        {new Date(selectedEscalation.insights_generated_at).toLocaleTimeString()}
+                      </span>
+                    )}
+                  </label>
+                  <div className="insights-box">
+                    {selectedEscalation.ai_insights.split('\n').map((line, idx) => {
+                      const trimmed = line.trim();
+                      if (!trimmed) return null;
+                      // Check if it's a bullet point or numbered item
+                      const isBullet = trimmed.startsWith('-') || trimmed.startsWith('•') || trimmed.match(/^\d+\./);
+                      return (
+                        <div key={idx} style={{ marginBottom: "0.5rem", paddingLeft: isBullet ? "1rem" : "0" }}>
+                          {trimmed}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {!selectedEscalation.ai_insights && selectedEscalation.status === "pending" && (
+                <div className="response-section">
+                  <div style={{ 
+                    padding: "0.75rem 1rem", 
+                    background: "var(--bg-gray-50)", 
+                    borderRadius: "0.5rem",
+                    color: "var(--text-gray-600)",
+                    fontSize: "0.875rem",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem"
+                  }}>
+                    <span>⏳</span>
+                    <span>Generating insights...</span>
+                  </div>
+                </div>
+              )}
+
               {selectedEscalation.recent_transcript &&
                 selectedEscalation.recent_transcript.length > 0 && (
                   <div className="response-section">
@@ -285,7 +311,7 @@ export default function EscalationDashboard() {
                       {selectedEscalation.recent_transcript.map((msg, idx) => (
                         <div key={idx} className="transcript-message">
                           <span className="transcript-role">
-                            {msg.role === "user" ? "User" : "Agent"}:
+                            {msg.role === "user" ? "Client" : "Humanly"}:
                           </span>
                           <span className="transcript-content">
                             {msg.content}
@@ -319,7 +345,7 @@ export default function EscalationDashboard() {
                   <textarea
                     value={responseText}
                     onChange={(e) => setResponseText(e.target.value)}
-                    placeholder="Type your response here. This will be sent to the agent..."
+                    placeholder="Type your response here. This will guide your Digital Twin's decision..."
                     className="response-textarea"
                   />
                   <motion.button
@@ -343,39 +369,43 @@ export default function EscalationDashboard() {
                 </div>
               )}
 
-              <motion.button
-                className="back-button"
-                onClick={() => {
-                  setSelectedEscalation(null);
-                  setResponseText("");
-                }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <ArrowLeft size={18} />
-                Back to List
-              </motion.button>
+              <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                <motion.button
+                  className="back-button"
+                  onClick={() => {
+                    setSelectedEscalation(null);
+                    setResponseText("");
+                  }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <ArrowLeft size={18} />
+                  Back to List
+                </motion.button>
+              </div>
             </div>
           </motion.div>
         )}
 
-        <motion.button
-          className="back-button"
-          onClick={() => {
-            window.location.href = window.location.pathname.replace(
-              "?mode=dashboard",
-              ""
-            );
-          }}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          <ArrowLeft size={18} />
-          Back to Home
-        </motion.button>
+        {!selectedEscalation && (
+          <motion.button
+            className="back-button"
+            onClick={() => {
+              window.location.href = window.location.pathname.replace(
+                "?mode=dashboard",
+                ""
+              );
+            }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            <ArrowLeft size={18} />
+            Back to Home
+          </motion.button>
+        )}
       </motion.div>
     </div>
   );

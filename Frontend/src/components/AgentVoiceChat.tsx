@@ -140,7 +140,7 @@ function AgentVoiceChat({ userId }: AgentVoiceChatProps) {
             <>
               <motion.div className="voice-chat-header">
                 <h2>Connection Failed</h2>
-                <p>Unable to connect to voice chat</p>
+                <p>Unable to connect to Humanly</p>
               </motion.div>
               
               <div className="error-message">
@@ -159,7 +159,7 @@ function AgentVoiceChat({ userId }: AgentVoiceChatProps) {
             <div className="voice-chat-header">
               <Loader2 className="animate-spin" size={32} style={{ margin: '0 auto 1rem' }} />
               <h2>Connecting...</h2>
-              <p>Setting up your voice chat session</p>
+              <p>Initializing your Digital Twin</p>
             </div>
           )}
         </motion.div>
@@ -329,8 +329,8 @@ function AgentInterface({ onDisconnect, audioDevices, audioOutputDevices, select
       </motion.div>
 
       <motion.div className="agent-info">
-        <h2>Connected to Agent</h2>
-        <p>Your AI companion is ready to chat</p>
+        <h2>Your Digital Twin is Active</h2>
+        <p>Humanly is ready to handle conversations and escalate when decisions need you</p>
       </motion.div>
 
       <motion.div className="controls">

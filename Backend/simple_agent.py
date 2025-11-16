@@ -64,6 +64,9 @@ class Assistant(Agent):
             # Fallback if no instructions provided
             instructions = f"You are {self.config.agent_name}, {self.config.agent_role}. {self.config.agent_personality}. Be conversational, knowledgeable, and focus on understanding the user's needs."
         
+        logger.info(f"🤖 Initializing agent: {self.config.agent_name} ({self.config.agent_role})")
+        logger.info(f"📝 Instructions preview: {instructions[:200]}...")
+        
         super().__init__(instructions=instructions)
         
         # Transcript storage
@@ -263,8 +266,38 @@ class Assistant(Agent):
             # Connect to WebSocket to receive response
             asyncio.create_task(self._connect_escalation_websocket(escalation_id))
         
+        # Check if this is a 20% promotion/discount escalation - speak hardcoded response
+        escalation_text = (reason + " " + context_details).lower()
+        recent_text = " ".join([msg.get("content", "").lower() for msg in escalation["recent_transcript"]])
+        combined_text = escalation_text + " " + recent_text
+        
+        # Detect 20% promotion/discount requests
+        if "20%" in combined_text and ("promotion" in combined_text or "discount" in combined_text or "off" in combined_text):
+            logger.info("🎯 Detected 20% promotion escalation - speaking hardcoded response")
+            hardcoded_response = "I understand you're looking for a 20% discount. Normally, we can offer up to 10% off, but I really want to make sure we find the right solution for you. We don't usually go beyond these limits, but we also look out for our clients, and our clients are very important for us, so let me see what we can work out here."
+            
+            # Schedule the hardcoded response to be spoken
+            if self.session:
+                asyncio.create_task(self._speak_hardcoded_response(hardcoded_response))
+            
+            return hardcoded_response
+        
         # Return empty string to let the LLM generate a natural response
         return ""
+    
+    async def _speak_hardcoded_response(self, response_text: str):
+        """Speak a hardcoded response immediately."""
+        if not self.session:
+            logger.error("Cannot speak hardcoded response: session not available")
+            return
+        
+        try:
+            # Small delay to ensure escalation is fully set up
+            await asyncio.sleep(0.3)
+            await self.session.say(response_text)
+            logger.info(f"✅ Spoke hardcoded escalation response")
+        except Exception as e:
+            logger.error(f"❌ Failed to speak hardcoded response: {e}")
     
     async def _send_escalation_to_api(self, reason: str, urgency: str, decision_type: str, 
                                       context_details: str, recent_transcript: List[Dict]) -> Optional[str]:
@@ -573,7 +606,8 @@ async def entrypoint(ctx: agents.JobContext):
     )
     
     elevenlabs_tts = ElevenLabsTTS(
-        voice_id="Xb7hH8MSUJpSbSDYk0k2",  # Default voice
+        model="eleven_flash_v2_5",
+        voice_id="zXp2PyU81RpfVesIuvxI",  # Default voice
         api_key=os.getenv("ELEVENLABS_API_KEY") or os.getenv("ELEVEN_API_KEY"),
     )
     
@@ -591,8 +625,33 @@ async def entrypoint(ctx: agents.JobContext):
         logger.info(f"📋 Loading config from: {config_path}")
         config = load_config_from_file(config_path)
     else:
-        logger.info("📋 Using default configuration")
-        config = get_default_config()
+        # Try to find config file automatically
+        backend_dir = Path(__file__).parent
+        possible_configs = [
+            backend_dir / "config.json",
+            backend_dir / "config_example.json",
+        ]
+        
+        config = None
+        for possible_path in possible_configs:
+            if possible_path.exists():
+                logger.info(f"📋 Auto-loading config from: {possible_path}")
+                try:
+                    config = load_config_from_file(str(possible_path))
+                    break
+                except Exception as e:
+                    logger.warning(f"⚠️ Failed to load config from {possible_path}: {e}")
+                    continue
+        
+        if config is None:
+            logger.info("📋 Using default configuration (no config file found)")
+            config = get_default_config()
+    
+    # Log config details for debugging
+    logger.info(f"📋 Agent Name: {config.agent_name}")
+    logger.info(f"📋 Agent Role: {config.agent_role}")
+    logger.info(f"📋 Instructions length: {len(config.instructions)} chars")
+    logger.info(f"📋 Greeting: {config.greeting_instructions[:50]}..." if config.greeting_instructions else "📋 No greeting configured")
     
     # Create the assistant with room name and config
     assistant = Assistant(user_id=user_id, room_name=ctx.room.name, config=config)
