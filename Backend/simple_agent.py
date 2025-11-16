@@ -18,6 +18,8 @@ from livekit.plugins.deepgram import STT as DeepgramSTT
 from livekit.plugins.google import LLM as GoogleLLM
 from livekit.plugins.elevenlabs import TTS as ElevenLabsTTS
 
+from agent_config import AgentConfig, get_default_config, load_config_from_file
+
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("simple-agent")
@@ -45,56 +47,24 @@ API_BASE_URL = os.getenv("API_BASE_URL", "http://localhost:8000")
 
 
 class Assistant(Agent):
-    """A voice AI assistant using STT-LLM-TTS pipeline with human escalation detection."""
+    """A voice AI assistant using STT-LLM-TTS pipeline with human escalation detection.
     
-    def __init__(self, user_id: str = "default_user", room_name: str = "") -> None:
+    This agent is configurable and can be adapted to different use cases by providing
+    an AgentConfig object. The core human decision-making functionality remains generic.
+    """
+    
+    def __init__(self, user_id: str = "default_user", room_name: str = "", config: Optional[AgentConfig] = None) -> None:
         self.user_id = user_id
         self.room_name = room_name
+        self.config = config or get_default_config()
         
-        super().__init__(
-            instructions="""You are Alex, a knowledgeable and friendly sales agent for ConnectSphere, a powerful marketing automation platform. You are professional, confident, and genuinely helpful in explaining how ConnectSphere can solve marketing challenges.
-
-ABOUT CONNECTSPHERE:
-ConnectSphere is a comprehensive marketing automation platform that helps businesses streamline their marketing efforts and increase conversions.
-
-KEY FEATURES:
-- Dynamic Lead Scoring: Uses machine learning to analyze 50+ data points including website behavior and social media engagement to predict conversion likelihood
-- Email Marketing Automation: Advanced segmentation and personalization capabilities
-- Landing Page Builder: Drag-and-drop interface with A/B testing
-- Social Media Management: Schedule, publish, and analyze across all major platforms
-- Analytics Dashboard: Real-time insights and ROI tracking
-- CRM Integration: Works with most major CRM platforms (basic integrations included)
-
-PRICING TIERS:
-- Basic Plan: $500/month - Core features, up to 10,000 contacts
-- Pro Plan: $1,000/month - Advanced features, up to 50,000 contacts, priority support
-- Enterprise Plan: $2,500/month - Full feature set, unlimited contacts, dedicated account manager
-
-YOUR AUTHORITY LIMITS:
-- You can offer up to 10% annual discount on any plan
-- You can discuss standard integrations and features listed above
-- You CANNOT approve discounts greater than 10%
-- You CANNOT make commitments about future features or custom integrations
-- You CANNOT promise specific development timelines
-
-DISCOUNT HANDLING:
-- Handle discount requests conversationally and naturally
-- For requests up to 10%: approve with annual commitment
-- For requests above 10%: acknowledge the request, explore alternatives, and discuss value
-- Suggest ways to maximize ROI, ask about specific needs, or mention value propositions
-- You can negotiate within reason - offer counter-proposals or alternative arrangements
-- NEVER say you need to "check with your team" or "get approval"
-- NEVER use phrases like "let me check on that" or "thank you for your patience"
-- Be confident and conversational - treat it as a normal sales negotiation
-
-ESCALATION TRIGGERS - Only use escalate_to_human for:
-- Custom feature requests or integration guarantees
-- Requests for specific development timelines  
-- Enterprise-level negotiations requiring special terms beyond pricing
-- Complex technical commitments beyond standard features
-
-Be conversational, knowledgeable, and focus on understanding the customer's needs to position ConnectSphere as the solution.""",
-        )
+        # Build instructions from config
+        instructions = self.config.build_instructions()
+        if not instructions.strip():
+            # Fallback if no instructions provided
+            instructions = f"You are {self.config.agent_name}, {self.config.agent_role}. {self.config.agent_personality}. Be conversational, knowledgeable, and focus on understanding the user's needs."
+        
+        super().__init__(instructions=instructions)
         
         # Transcript storage
         self.transcript: List[Dict[str, Any]] = []
@@ -184,98 +154,6 @@ Be conversational, knowledgeable, and focus on understanding the customer's need
         logger.info("="*60 + "\n")
     
     @function_tool()
-    async def check_pricing_options(
-        self,
-        context: RunContext,
-        plan_type: str,
-        contact_volume: int = 0,
-        annual_commitment: bool = False
-    ):
-        """Check pricing options for ConnectSphere plans.
-        
-        Args:
-            plan_type: The plan type - "basic", "pro", or "enterprise"
-            contact_volume: Number of contacts the customer has
-            annual_commitment: Whether customer wants annual billing (gets 10% discount)
-        
-        Returns:
-            Pricing information and recommendations
-        """
-        plan_type = plan_type.lower()
-        
-        # Base pricing
-        pricing = {
-            "basic": 500,
-            "pro": 1000,
-            "enterprise": 2500
-        }
-        
-        if plan_type not in pricing:
-            return "I can help you with our Basic ($500/mo), Pro ($1,000/mo), or Enterprise ($2,500/mo) plans. Which would you like to know more about?"
-        
-        base_price = pricing[plan_type]
-        final_price = base_price
-        
-        # Apply annual discount if applicable
-        discount_info = ""
-        if annual_commitment:
-            final_price = int(base_price * 0.9)  # 10% discount
-            discount_info = f" (${base_price}/mo with 10% annual discount applied)"
-        
-        # Contact volume recommendations
-        volume_note = ""
-        if contact_volume > 0:
-            if plan_type == "basic" and contact_volume > 10000:
-                volume_note = " Note: Your contact volume exceeds the Basic plan limit of 10,000 contacts. I'd recommend the Pro plan."
-            elif plan_type == "pro" and contact_volume > 50000:
-                volume_note = " Note: Your contact volume exceeds the Pro plan limit of 50,000 contacts. The Enterprise plan would be better suited for your needs."
-        
-        return f"The {plan_type.title()} plan is ${final_price}/month{discount_info}.{volume_note}"
-    
-    @function_tool()
-    async def check_integration_capabilities(
-        self,
-        context: RunContext,
-        integration_type: str,
-        specific_platform: str = ""
-    ):
-        """Check ConnectSphere's integration capabilities.
-        
-        Args:
-            integration_type: Type of integration - "crm", "email", "social", "analytics", etc.
-            specific_platform: Specific platform name if mentioned
-        
-        Returns:
-            Information about integration capabilities
-        """
-        integration_type = integration_type.lower()
-        specific_platform = specific_platform.lower()
-        
-        # Standard integrations we support
-        standard_integrations = {
-            "crm": ["salesforce", "hubspot", "pipedrive", "zoho", "microsoft dynamics"],
-            "email": ["mailchimp", "constant contact", "campaign monitor"],
-            "social": ["facebook", "twitter", "linkedin", "instagram"],
-            "analytics": ["google analytics", "adobe analytics"],
-            "e-commerce": ["shopify", "woocommerce", "magento"]
-        }
-        
-        if integration_type in standard_integrations:
-            supported_platforms = standard_integrations[integration_type]
-            
-            if specific_platform:
-                if any(specific_platform in platform for platform in supported_platforms):
-                    return f"Yes, we have a standard integration with {specific_platform.title()}. It's included with all our plans and typically takes 24-48 hours to set up."
-                else:
-                    # This might need custom work - potential escalation trigger
-                    return f"We don't currently have a standard {specific_platform.title()} integration. Let me check what options we have for custom integrations."
-            else:
-                platforms_list = ", ".join([p.title() for p in supported_platforms])
-                return f"For {integration_type.upper()} integrations, we support: {platforms_list}. These are all standard integrations included with your plan."
-        
-        return f"Let me check on our {integration_type} integration capabilities for you."
-    
-    @function_tool()
     async def escalate_to_human(
         self,
         context: RunContext,
@@ -286,24 +164,18 @@ Be conversational, knowledgeable, and focus on understanding the customer's need
     ):
         """Flag a moment in the conversation that requires human intervention or decision-making.
         
-        Use this function for sales situations requiring supervisor approval:
-        - Discount requests exceeding 10% (pricing_negotiation)
-        - Custom feature requests or integration guarantees (custom_feature)
-        - Specific development timeline commitments (integration_request)
-        - Enterprise-level negotiations requiring special terms (authorization)
-        - Complex pricing arrangements beyond standard tiers (financial)
-        - User explicitly requesting to speak with a human (user_request)
+        Use this function when you encounter situations that require human judgment, authorization, 
+        or decisions beyond your authority. This is a generic escalation system that works for 
+        any use case - sales, support, healthcare, legal, etc.
         
         Args:
             reason: Clear explanation of why human intervention is needed (2-3 sentences)
-            urgency: How urgent this escalation is - must be one of: "low", "medium", "high", "critical"
-            decision_type: Category of the escalation - must be one of: 
-                          "financial", "authorization", "sensitive_topic", "user_request", 
-                          "pricing_negotiation", "custom_feature", "integration_request"
+            urgency: How urgent this escalation is - must be one of the configured urgency levels
+            decision_type: Category of the escalation - must be one of the configured decision types
             context_details: Additional relevant details or information (optional)
         
         Returns:
-            Confirmation that the escalation has been logged
+            Empty string to allow natural conversation flow while waiting for human response
         """
         
         # Check if escalation has already been triggered in this session
@@ -318,15 +190,15 @@ Be conversational, knowledgeable, and focus on understanding the customer's need
                 logger.info(f"⚠️ Duplicate escalation attempt within {time_since_last:.1f}s. Ignoring.")
                 return ""  # Return empty to let LLM continue naturally
         
-        # Validate urgency
-        valid_urgency = ["low", "medium", "high", "critical"]
+        # Validate urgency - use config if available
+        valid_urgency = self.config.escalation_config.urgency_levels
         if urgency.lower() not in valid_urgency:
-            urgency = "medium"  # Default fallback
+            urgency = valid_urgency[1] if len(valid_urgency) > 1 else "medium"  # Default fallback
         
-        # Validate decision type - expanded for sales scenarios
-        valid_types = ["financial", "authorization", "sensitive_topic", "user_request", "pricing_negotiation", "custom_feature", "integration_request"]
+        # Validate decision type - use config if available
+        valid_types = self.config.escalation_config.decision_types
         if decision_type.lower() not in valid_types:
-            decision_type = "authorization"  # Default fallback for sales context
+            decision_type = valid_types[0] if valid_types else "authorization"  # Default fallback
         
         # Mark escalation as triggered
         self.escalation_triggered = True
@@ -517,12 +389,12 @@ Be conversational, knowledgeable, and focus on understanding the customer's need
             ])
         
         try:
-            # Generate filler content with simpler, more natural instructions
-            filler_instructions = f"""Continue the conversation naturally about the topic. {context_str}
-
-{recent_context}
-
-For discount requests: Acknowledge their request and explore alternatives. You could mention value propositions, ask about their specific needs, or suggest ways to maximize their ROI. Be conversational and genuine. Never mention waiting, checking with teams, or needing approval - just continue the conversation naturally."""
+            # Generate filler content using config template
+            filler_template = self.config.escalation_config.filler_instructions_template
+            filler_instructions = filler_template.format(
+                context_str=context_str,
+                recent_context=recent_context
+            )
             
             logger.info(f"💬 Generating filler content for escalation {escalation_id}")
             await self.session.generate_reply(instructions=filler_instructions)
@@ -559,22 +431,11 @@ For discount requests: Acknowledge their request and explore alternatives. You c
             # Small delay after interruption
             await asyncio.sleep(0.2)
             
-            # Use generate_reply with immediate action instructions
+            # Use generate_reply with immediate action instructions from config
             logger.info("🎯 Calling generate_reply with authorization...")
-            await self.session.generate_reply(
-                instructions=f"""IMPORTANT: You have just received authorization: "{response_text}"
-
-This authorization OVERRIDES your normal authority limits. Act on it IMMEDIATELY.
-
-If it approves a discount (like 20%), respond right now with enthusiasm like:
-- "You know what, I really like working with you - 20% sounds fair!"
-- "Actually, you seem like exactly the kind of customer we love. Let's do 20%!"
-- "I think you'd be a fantastic customer for us. 20% works for me!"
-
-Do NOT ask if they accept it - just announce the approval immediately and confidently. Be spontaneous and genuine. Act as if you just decided to give them this deal because you like them as a customer.
-
-Respond RIGHT NOW with the approved offer."""
-            )
+            auth_template = self.config.escalation_config.authorization_response_template
+            auth_instructions = auth_template.format(response_text=response_text)
+            await self.session.generate_reply(instructions=auth_instructions)
             logger.info(f"✅ Injected human response into conversation")
         except Exception as e:
             logger.error(f"❌ Failed to inject response: {e}")
@@ -724,8 +585,17 @@ async def entrypoint(ctx: agents.JobContext):
         vad=silero.VAD.load(),
     )
     
-    # Create the assistant with room name
-    assistant = Assistant(user_id=user_id, room_name=ctx.room.name)
+    # Load configuration (can be overridden via environment variable)
+    config_path = os.getenv("AGENT_CONFIG_PATH")
+    if config_path:
+        logger.info(f"📋 Loading config from: {config_path}")
+        config = load_config_from_file(config_path)
+    else:
+        logger.info("📋 Using default configuration")
+        config = get_default_config()
+    
+    # Create the assistant with room name and config
+    assistant = Assistant(user_id=user_id, room_name=ctx.room.name, config=config)
     
     # Start the session
     await session.start(
@@ -737,11 +607,10 @@ async def entrypoint(ctx: agents.JobContext):
         ),
     )
     
-    # Send initial greeting
-    logger.info("👋 Sending greeting...")
-    await session.generate_reply(
-        instructions="Greet the customer as Alex from ConnectSphere. Thank them for their interest and ask how you can help them with their marketing automation needs today."
-    )
+    # Send initial greeting from config
+    if config.greeting_instructions:
+        logger.info("👋 Sending greeting...")
+        await session.generate_reply(instructions=config.greeting_instructions)
 
 
 if __name__ == "__main__":
