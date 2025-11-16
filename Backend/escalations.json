@@ -1113,5 +1113,35 @@
         "content": "Do you think that that might be possible?"
       }
     ]
+  },
+  {
+    "timestamp": "2025-11-16T07:08:51.111345",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user's query about \"API.K.On live template model\" is unclear and seems to refer to a specific internal system or product detail that I don't have information on.",
+    "urgency": "medium",
+    "decision_type": "authorization",
+    "context_details": "The user asked: \"Which is the the model of the API.K.On live template,Hello?\"",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-16T07:08:41.859511",
+        "role": "user",
+        "content": "Okay. Which is the the model of the API."
+      },
+      {
+        "timestamp": "2025-11-16T07:08:43.107871",
+        "role": "user",
+        "content": "K."
+      },
+      {
+        "timestamp": "2025-11-16T07:08:44.712564",
+        "role": "user",
+        "content": "On live template,"
+      },
+      {
+        "timestamp": "2025-11-16T07:08:47.490350",
+        "role": "user",
+        "content": "Hello?"
+      }
+    ]
   }
 ]
