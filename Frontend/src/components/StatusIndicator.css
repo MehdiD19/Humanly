@@ -1,0 +1,52 @@
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.875rem 1.5rem;
+  background: var(--bg-gray-50);
+  border: 1px solid var(--border-gray-200);
+  border-radius: 0.875rem;
+  transition: border-color 0.2s ease;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--border-gray-300);
+  transition: all 0.2s ease;
+}
+
+.status-dot.listening {
+  background: #10b981;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.35);
+}
+
+.status-dot.thinking {
+  background: #f59e0b;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.35);
+}
+
+.status-dot.speaking {
+  background: var(--text-black);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+}
+
+.status-dot.connecting,
+.status-dot.initializing {
+  background: var(--text-gray-500);
+}
+
+.status-dot.disconnected {
+  background: #ef4444;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+}
+
+.status-text {
+  font-size: 0.9375rem;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: var(--text-gray-700);
+  opacity: 0.85;
+}
+

@@ -1113,5 +1113,435 @@
         "content": "Do you think that that might be possible?"
       }
     ]
+  },
+  {
+    "timestamp": "2025-11-16T07:08:51.111345",
+    "user_id": "test_user_24c7655c",
+    "reason": "The user's query about \"API.K.On live template model\" is unclear and seems to refer to a specific internal system or product detail that I don't have information on.",
+    "urgency": "medium",
+    "decision_type": "authorization",
+    "context_details": "The user asked: \"Which is the the model of the API.K.On live template,Hello?\"",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-16T07:08:41.859511",
+        "role": "user",
+        "content": "Okay. Which is the the model of the API."
+      },
+      {
+        "timestamp": "2025-11-16T07:08:43.107871",
+        "role": "user",
+        "content": "K."
+      },
+      {
+        "timestamp": "2025-11-16T07:08:44.712564",
+        "role": "user",
+        "content": "On live template,"
+      },
+      {
+        "timestamp": "2025-11-16T07:08:47.490350",
+        "role": "user",
+        "content": "Hello?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-16T07:16:37.211485",
+    "user_id": "test_user_24c7655c",
+    "reason": "Customer requesting a 20% discount on the Pro Plan, exceeding my 10% authorized discount limit.",
+    "urgency": "high",
+    "decision_type": "authorization",
+    "context_details": "The customer has 20,000 contacts and is interested in the Pro Plan at $1,000/month. They are requesting a 20% annual discount, but I am only authorized to offer up to 10%.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-16T07:16:20.366704",
+        "role": "assistant",
+        "content": "That's great to hear you're interested in the Pro Plan! It's an excellent choice for 20,000 contacts, as it covers up to 50,000 contacts and includes our advanced features like dynamic lead scoring and advanced email marketing automation.\n\nThe standard Pro Plan is $1,000 per month. If you choose an"
+      },
+      {
+        "timestamp": "2025-11-16T07:16:20.515702",
+        "role": "user",
+        "content": "So"
+      },
+      {
+        "timestamp": "2025-11-16T07:16:34.070884",
+        "role": "assistant",
+        "content": "annual plan, I can offer you a 10% discount, which is the maximum I can offer."
+      },
+      {
+        "timestamp": "2025-11-16T07:16:34.085926",
+        "role": "user",
+        "content": "Okay. I'm interested, but I want only twenty percent discount."
+      },
+      {
+        "timestamp": "2025-11-16T07:16:35.342591",
+        "role": "user",
+        "content": "Possible?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-16T07:30:14.822949",
+    "user_id": "test_user_24c7655c",
+    "reason": "User is requesting a 20% discount on the Pro Plan, which exceeds the maximum allowable 10% discount.",
+    "urgency": "high",
+    "decision_type": "authorization",
+    "context_details": "User wants to purchase the Pro Plan for 20,000 contacts on an annual basis and is requesting a 20% discount. I can only offer up to 10%.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-16T07:29:44.417540",
+        "role": "user",
+        "content": "How much will it cost, please?"
+      },
+      {
+        "timestamp": "2025-11-16T07:30:05.951766",
+        "role": "assistant",
+        "content": "That's excellent! The Pro Plan is a great choice for your needs, especially with 20,000 contacts.\n\nThe Pro Plan is normally $1,000 per month. If you opt for an annual plan, I can offer you a 10% discount.\n\nHere's the"
+      },
+      {
+        "timestamp": "2025-11-16T07:30:06.004764",
+        "role": "user",
+        "content": "Okay."
+      },
+      {
+        "timestamp": "2025-11-16T07:30:08.104108",
+        "role": "user",
+        "content": "I want to go with for"
+      },
+      {
+        "timestamp": "2025-11-16T07:30:12.499931",
+        "role": "user",
+        "content": "want to go for a twenty percent discount. Would it be possible maybe?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-16T07:36:42.400273",
+    "user_id": "test_user_24c7655c",
+    "reason": "User is requesting a 20% discount on the Pro Plan, which exceeds the maximum 10% discount I am authorized to offer.",
+    "urgency": "high",
+    "decision_type": "authorization",
+    "context_details": "The user is interested in the Pro Plan and is asking for a 20% discount. I can only offer up to a 10% annual discount.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-16T07:36:33.118977",
+        "role": "assistant",
+        "content": "Hello! I'm Alex from ConnectSphere. Thank you for your interest in our platform."
+      },
+      {
+        "timestamp": "2025-11-16T07:36:33.736281",
+        "role": "user",
+        "content": "Hi. How are you doing? We're doing very good. Well,"
+      },
+      {
+        "timestamp": "2025-11-16T07:36:40.281260",
+        "role": "user",
+        "content": "I want to go for the pro plan but I got I want a twenty percent reduction. It possible?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-16T08:32:16.029244",
+    "user_id": "test_user_24c7655c",
+    "reason": "User requested a 20% discount on the Pro Plan, which exceeds my 10% discount authority limit.",
+    "urgency": "high",
+    "decision_type": "authorization",
+    "context_details": "The user is asking for a 20% discount on the Pro Plan. I am authorized to offer a maximum of 10% annual discount.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-16T08:32:13.466184",
+        "role": "assistant",
+        "content": "Hello! I'm Alex from ConnectSphere. Thank you for your interest in our marketing automation platform. How can I help you with your marketing automation needs today?"
+      },
+      {
+        "timestamp": "2025-11-16T08:32:14.309009",
+        "role": "user",
+        "content": "I want twenty percent I want twenty percent on the pro plan. Is it possible? Thank you."
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-16T08:55:26.419234",
+    "user_id": "test_user_24c7655c",
+    "reason": "User is requesting a 20% discount on an annual plan, but my authority is limited to 10%.",
+    "urgency": "medium",
+    "decision_type": "authorization",
+    "context_details": "The user has 20,000 clients and is interested in a one-year engagement. This would place them on our Pro Plan ($1,000/month, up to 50,000 contacts).",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-16T08:55:11.779579",
+        "role": "assistant",
+        "content": "Hey there! I'm Ryan, co-founder of ConnectSphere. Thanks so much for reaching out. How can I help you revolutionize your marketing and sales automation today? I'm genuinely"
+      },
+      {
+        "timestamp": "2025-11-16T08:55:22.173288",
+        "role": "user",
+        "content": "Okay. I want the I want the twenty percent promotion. Would it be possible, please? I I have twenty thousand clients, and I have"
+      },
+      {
+        "timestamp": "2025-11-16T08:55:23.968603",
+        "role": "user",
+        "content": "I I want to engage for one for one year."
+      },
+      {
+        "timestamp": "2025-11-16T08:55:23.985564",
+        "role": "user",
+        "content": "It be possible?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-16T09:13:53.096579",
+    "user_id": "test_user_24c7655c",
+    "reason": "User reported a technical connection issue with 'Eleven Labs'.",
+    "urgency": "medium",
+    "decision_type": "authorization",
+    "context_details": "The user stated: 'Could not connect to eleven labs.' This requires technical investigation into an external service integration.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-16T09:13:28.704941",
+        "role": "user",
+        "content": "And this deployment"
+      },
+      {
+        "timestamp": "2025-11-16T09:13:33.566591",
+        "role": "assistant",
+        "content": "Could you please elaborate on what you mean by \"deployment\"? I'd be happy to discuss how ConnectSphere can be deployed for your business, but I need a little more context. Are you asking about the setup process, integration with existing systems, or something else?"
+      },
+      {
+        "timestamp": "2025-11-16T09:13:44.316712",
+        "role": "user",
+        "content": "Hi."
+      },
+      {
+        "timestamp": "2025-11-16T09:13:49.671716",
+        "role": "assistant",
+        "content": "Hello again! Ryan here, co-founder of ConnectSphere. How can I help you today with your marketing and sales automation needs?"
+      },
+      {
+        "timestamp": "2025-11-16T09:13:50.131711",
+        "role": "user",
+        "content": "Could not connect to eleven labs."
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-16T10:02:42.213422",
+    "user_id": "test_user_24c7655c",
+    "reason": "Discount request exceeds my authority (20% requested, 10% maximum allowed).",
+    "urgency": "high",
+    "decision_type": "authorization",
+    "context_details": "User is interested in the Pro Plan and has requested a 20% discount. My limit is 10%.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-16T10:02:19.716136",
+        "role": "user",
+        "content": "Hey, Ryan. Thanks. I wanna know more about your pro plan."
+      },
+      {
+        "timestamp": "2025-11-16T10:02:36.814295",
+        "role": "assistant",
+        "content": "That's an excellent choice! The Pro Plan is where many of our clients find their sweet spot for serious growth.\n\nHere's what the Pro Plan includes:\n\n*   **Price:** $1,000 per month.\n*   **Contact Management:** You can manage up to 50,000 contacts with our advanced segmentation tools. This is a huge leap for businesses looking to expand their"
+      },
+      {
+        "timestamp": "2025-11-16T10:02:36.831296",
+        "role": "user",
+        "content": "Wait."
+      },
+      {
+        "timestamp": "2025-11-16T10:02:41.214257",
+        "role": "user",
+        "content": "Wait. And"
+      },
+      {
+        "timestamp": "2025-11-16T10:02:41.237262",
+        "role": "user",
+        "content": "I wanna have a twenty percent promotion."
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-16T10:08:15.713425",
+    "user_id": "test_user_24c7655c",
+    "reason": "User requested a 20% discount on the Pro Plan, which exceeds my 10% standard discount authority and 15% escalation threshold.",
+    "urgency": "high",
+    "decision_type": "authorization",
+    "context_details": "User is interested in the Pro Plan and explicitly asked for a 20% discount. My limit is 10%, and I can't approve anything over 15% without escalation.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-16T10:07:58.848889",
+        "role": "user",
+        "content": "Okay, Ryan. That's pretty good."
+      },
+      {
+        "timestamp": "2025-11-16T10:08:05.546425",
+        "role": "user",
+        "content": "What I like is I've seen your pro plan. And I've seen that you can do a ten percent"
+      },
+      {
+        "timestamp": "2025-11-16T10:08:09.993689",
+        "role": "user",
+        "content": "like, reduction"
+      },
+      {
+        "timestamp": "2025-11-16T10:08:10.016693",
+        "role": "user",
+        "content": "for the plan for the pro plan."
+      },
+      {
+        "timestamp": "2025-11-16T10:08:13.896725",
+        "role": "user",
+        "content": "I will want a twenty percent reduction. Could it work?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-16T10:10:16.182592",
+    "user_id": "test_user_24c7655c",
+    "reason": "User requested a 20% discount, which exceeds the 10% discount I am authorized to offer.",
+    "urgency": "high",
+    "decision_type": "authorization",
+    "context_details": "The user is interested in the Pro Plan and is asking for a 20% discount. My limit is 10%.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-16T10:10:02.815242",
+        "role": "assistant",
+        "content": "Hello! I'm Ryan, co-founder of ConnectSphere. Thanks for reaching out! How can I help you streamline your marketing and sales automation today and help your business grow?"
+      },
+      {
+        "timestamp": "2025-11-16T10:10:04.502026",
+        "role": "user",
+        "content": "Hi, Ryan. I I I've seen your your pro offer"
+      },
+      {
+        "timestamp": "2025-11-16T10:10:08.907275",
+        "role": "user",
+        "content": "I've seen it's pretty good. But I'm wondering"
+      },
+      {
+        "timestamp": "2025-11-16T10:10:15.109790",
+        "role": "user",
+        "content": "there's only max ten percent reduction. I would want the twenty percent reduction. Would it be possible, please?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-16T10:12:00.947414",
+    "user_id": "test_user_24c7655c",
+    "reason": "User requested a 20% discount, which exceeds the 10% limit of my authority.",
+    "urgency": "high",
+    "decision_type": "authorization",
+    "context_details": "The user is interested in ConnectSphere and is asking for a 20% discount on a plan. My authority limit for discounts is 10%.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-16T10:11:45.858970",
+        "role": "assistant",
+        "content": "Hello there! I'm Ryan, co-founder of ConnectSphere. Thanks for reaching out! How can I help you streamline your marketing and sales automation today? I'm keen to learn about your"
+      },
+      {
+        "timestamp": "2025-11-16T10:11:45.873976",
+        "role": "user",
+        "content": "Hey, Ryan. I really like your program. I've seen"
+      },
+      {
+        "timestamp": "2025-11-16T10:11:48.847894",
+        "role": "user",
+        "content": "we can only have a ten percent"
+      },
+      {
+        "timestamp": "2025-11-16T10:11:53.496595",
+        "role": "user",
+        "content": "a ten percent we can only have a ten percent promotion."
+      },
+      {
+        "timestamp": "2025-11-16T10:11:59.095476",
+        "role": "user",
+        "content": "Will you could you be able to help us have a twenty percent"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-16T10:13:34.719510",
+    "user_id": "test_user_24c7655c",
+    "reason": "User requested a 20% discount on the Pro Plan, which exceeds the 10% discount authority.",
+    "urgency": "high",
+    "decision_type": "authorization",
+    "context_details": "The user is asking for a 20% discount on the Pro Plan, but I am only authorized to offer up to a 10% annual discount.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-16T10:13:19.145070",
+        "role": "assistant",
+        "content": "Hello! I'm Ryan, co-founder of ConnectSphere. Thanks for reaching out and for your interest in our platform! How can I"
+      },
+      {
+        "timestamp": "2025-11-16T10:13:21.387608",
+        "role": "user",
+        "content": "Hi, Ryan. It's very good to talk to you."
+      },
+      {
+        "timestamp": "2025-11-16T10:13:31.773455",
+        "role": "user",
+        "content": "I would like to have a twenty offer twenty percent offer promotion offer in your"
+      },
+      {
+        "timestamp": "2025-11-16T10:13:31.942541",
+        "role": "user",
+        "content": "pro plan. Would it be possible, please?"
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-16T10:15:13.318939",
+    "user_id": "test_user_24c7655c",
+    "reason": "User requested a 20% discount on the Pro plan, which exceeds the 10% discount I am authorized to offer.",
+    "urgency": "high",
+    "decision_type": "authorization",
+    "context_details": "The user is interested in the Pro plan and is asking for a 20% promotion. My maximum authorized discount is 10%.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-16T10:15:03.913621",
+        "role": "assistant",
+        "content": "Hello there! I'm Ryan, co-founder of ConnectSphere. Thanks so much for reaching out and for your interest in what we're building. How can I help you with your"
+      },
+      {
+        "timestamp": "2025-11-16T10:15:11.655900",
+        "role": "user",
+        "content": "Ryan. I hope you're doing good. Well, I've seen your twenty percent I've seen your pro and I'm very interested. But I would love to have a twenty percent promotion."
+      }
+    ]
+  },
+  {
+    "timestamp": "2025-11-16T10:17:29.142768",
+    "user_id": "test_user_24c7655c",
+    "reason": "User requesting a 20% discount, which exceeds the 10% annual discount authority.",
+    "urgency": "medium",
+    "decision_type": "authorization",
+    "context_details": "User is interested in the Pro Plan and is asking for a 20% discount. I can offer up to 10% annually.",
+    "recent_transcript": [
+      {
+        "timestamp": "2025-11-16T10:17:19.928739",
+        "role": "assistant",
+        "content": "Hello! I'm Ryan, co-founder of ConnectSphere. Thanks for reaching out! How can I help you with your marketing and sales automation"
+      },
+      {
+        "timestamp": "2025-11-16T10:17:21.318990",
+        "role": "user",
+        "content": "Ryan. I good?"
+      },
+      {
+        "timestamp": "2025-11-16T10:17:21.397509",
+        "role": "user",
+        "content": "Well,"
+      },
+      {
+        "timestamp": "2025-11-16T10:17:24.065773",
+        "role": "user",
+        "content": "I've seen your pro plan. I think it's very good."
+      },
+      {
+        "timestamp": "2025-11-16T10:17:26.956177",
+        "role": "user",
+        "content": "But I think the twenty percent"
+      }
+    ]
   }
 ]

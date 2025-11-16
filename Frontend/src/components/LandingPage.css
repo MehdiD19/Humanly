@@ -43,50 +43,13 @@
   line-height: 1.6;
 }
 
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1.5rem;
-  width: 100%;
-}
-
-.feature-card {
+.buttons-container {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1.5rem;
-  background: var(--bg-white);
-  border: 1px solid var(--border-gray-200);
-  border-radius: 1rem;
-  transition: var(--transition);
-}
-
-.feature-card:hover {
-  border-color: var(--text-black);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-4px);
-}
-
-.feature-icon {
-  color: var(--text-black);
-  width: 32px;
-  height: 32px;
-}
-
-.feature-card h3 {
-  font-size: 1rem;
-  font-weight: 500;
-  color: var(--text-gray-900);
-  margin: 0;
-}
-
-.feature-card p {
-  font-size: 0.875rem;
-  font-weight: 300;
-  color: var(--text-gray-600);
-  margin: 0;
-  line-height: 1.5;
+  justify-content: center;
+  gap: 1rem;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
 .start-button {
@@ -105,7 +68,8 @@
   cursor: pointer;
   transition: var(--transition);
   box-shadow: var(--shadow-lg);
-  width: 100%;
+  flex: 1;
+  min-width: 200px;
   max-width: 300px;
   position: relative;
 }
@@ -125,8 +89,8 @@
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  padding: 0.875rem 2rem;
-  font-size: 1rem;
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
   font-weight: 400;
   letter-spacing: -0.01em;
   color: var(--text-gray-900);
@@ -135,7 +99,8 @@
   border-radius: 0.75rem;
   cursor: pointer;
   transition: var(--transition);
-  width: 100%;
+  flex: 1;
+  min-width: 200px;
   max-width: 300px;
 }
 
@@ -181,13 +146,9 @@
     font-size: 1rem;
   }
 
-  .features-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .feature-card {
-    padding: 1.25rem;
+  .buttons-container {
+    flex-direction: column;
+    gap: 0.75rem;
   }
 
   .start-button {
@@ -214,20 +175,13 @@
     font-size: 0.95rem;
   }
 
-  .features-grid {
-    gap: 0.75rem;
-  }
-
-  .feature-card {
-    padding: 1rem;
+  .buttons-container {
     gap: 0.5rem;
   }
 
-  .feature-card h3 {
-    font-size: 0.9rem;
-  }
-
-  .feature-card p {
-    font-size: 0.75rem;
+  .start-button,
+  .dashboard-button {
+    min-width: 100%;
+    max-width: 100%;
   }
 }

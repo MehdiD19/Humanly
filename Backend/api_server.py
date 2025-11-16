@@ -13,6 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from dotenv import load_dotenv
 from livekit import api
+from anthropic import Anthropic
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -38,6 +39,19 @@ app.add_middleware(
 escalations: Dict[str, dict] = {}
 agent_websockets: Dict[str, WebSocket] = {}  # escalation_id -> websocket
 frontend_websockets: Set[WebSocket] = set()  # All frontend connections
+
+# Initialize Anthropic Claude client (after loading env vars)
+claude_client = None
+claude_api_key = os.getenv("ANTHROPIC_API_KEY") or os.getenv("CLAUDE_API_KEY")
+if claude_api_key:
+    try:
+        claude_client = Anthropic(api_key=claude_api_key)
+        logger.info("✅ Claude API client initialized")
+    except Exception as e:
+        logger.error(f"❌ Failed to initialize Claude client: {e}")
+        claude_client = None
+else:
+    logger.warning("⚠️ ANTHROPIC_API_KEY or CLAUDE_API_KEY not set - insights generation will be disabled")
 
 # Request/Response models
 class TokenRequest(BaseModel):
@@ -65,6 +79,96 @@ class EscalationResponse(BaseModel):
 class HumanResponseRequest(BaseModel):
     response_text: str
 
+async def generate_decision_insights(escalation: dict) -> Optional[str]:
+    """Generate AI insights about the escalation decision using Claude."""
+    escalation_id = escalation.get("escalation_id", "unknown")
+    logger.info(f"🔍 [INSIGHTS] Starting insight generation for escalation {escalation_id}")
+    
+    if not claude_client:
+        logger.warning(f"⚠️ [INSIGHTS] Claude client not initialized - skipping insights for {escalation_id}")
+        return None
+    
+    try:
+        # Build context from escalation
+        reason = escalation.get("reason", "")
+        decision_type = escalation.get("decision_type", "")
+        context_details = escalation.get("context_details", "")
+        urgency = escalation.get("urgency", "")
+        
+        logger.info(f"📋 [INSIGHTS] Escalation context - Type: {decision_type}, Urgency: {urgency}, Reason length: {len(reason)} chars")
+        
+        # Build conversation context
+        transcript = escalation.get("recent_transcript", [])
+        conversation_context = ""
+        if transcript:
+            conversation_context = "\n".join([
+                f"{msg.get('role', 'user').title()}: {msg.get('content', '')}"
+                for msg in transcript[-5:]  # Last 5 messages
+            ])
+            logger.info(f"💬 [INSIGHTS] Using {len(transcript)} transcript messages")
+        else:
+            logger.info(f"💬 [INSIGHTS] No transcript available")
+        
+        # Create prompt for Claude
+        prompt = f"""You are analyzing an escalation decision that requires human judgment. Provide concise, actionable insights about the implications of this decision.
+
+ESCALATION DETAILS:
+- Type: {decision_type}
+- Urgency: {urgency}
+- Reason: {reason}
+{f"- Additional Context: {context_details}" if context_details else ""}
+
+RECENT CONVERSATION:
+{conversation_context if conversation_context else "No recent conversation available"}
+
+Provide 2-4 bullet points analyzing:
+1. Strategic implications (e.g., "If approved, consider impact on other clients")
+2. Risks or concerns to be aware of
+3. Factors that support or oppose the decision
+4. Any precedent or pattern considerations
+
+Keep insights concise (1-2 sentences each). Focus on actionable intelligence that helps the operator make an informed decision."""
+
+        logger.info(f"🚀 [INSIGHTS] Calling Claude API for escalation {escalation_id}...")
+        logger.debug(f"📝 [INSIGHTS] Prompt length: {len(prompt)} chars")
+        
+        # Call Claude API with fast model (haiku - fastest Claude model)
+        # Run in thread pool to avoid blocking the event loop
+        def call_claude():
+            return claude_client.messages.create(
+                model="claude-3-haiku-20240307",  # Fast model for quick insights
+                max_tokens=500,
+                temperature=0.7,  # Slight creativity for better insights
+                messages=[
+                    {"role": "user", "content": prompt}
+                ]
+            )
+        
+        import concurrent.futures
+        loop = asyncio.get_event_loop()
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            response = await loop.run_in_executor(executor, call_claude)
+        
+        logger.info(f"✅ [INSIGHTS] Claude API response received for {escalation_id}")
+        logger.debug(f"📦 [INSIGHTS] Response content type: {type(response.content)}")
+        logger.debug(f"📦 [INSIGHTS] Response content length: {len(response.content) if response.content else 0}")
+        
+        insights = response.content[0].text if response.content else None
+        
+        if insights:
+            logger.info(f"💡 [INSIGHTS] Successfully generated insights for {escalation_id} ({len(insights)} chars)")
+            logger.debug(f"📄 [INSIGHTS] Insights preview: {insights[:100]}...")
+        else:
+            logger.warning(f"⚠️ [INSIGHTS] No insights text in response for {escalation_id}")
+        
+        return insights
+        
+    except Exception as e:
+        logger.error(f"❌ [INSIGHTS] Failed to generate insights for {escalation_id}: {e}", exc_info=True)
+        import traceback
+        logger.error(f"📚 [INSIGHTS] Traceback: {traceback.format_exc()}")
+        return None
+
 @app.get("/")
 async def root():
     """Health check endpoint"""
@@ -90,19 +194,62 @@ async def create_escalation(request: EscalationRequest):
         "created_at": datetime.now().isoformat(),
         "human_response": None,
         "responded_at": None,
+        "ai_insights": None,  # Will be populated asynchronously
+        "insights_generated_at": None,
     }
     
     escalations[escalation_id] = escalation
     
     logger.info(f"🚨 New escalation created: {escalation_id} (urgency: {request.urgency})")
     
-    # Notify all connected frontend clients
+    # Notify all connected frontend clients immediately (without insights)
     await broadcast_to_frontend({
         "type": "new_escalation",
         "escalation": escalation
     })
     
+    # Generate insights asynchronously (non-blocking)
+    logger.info(f"🚀 [ESCALATION] Starting async insight generation task for {escalation_id}")
+    task = asyncio.create_task(generate_and_update_insights(escalation_id, escalation))
+    logger.info(f"✅ [ESCALATION] Insight generation task created for {escalation_id} (task: {task})")
+    
     return EscalationResponse(escalation_id=escalation_id, status="pending")
+
+async def generate_and_update_insights(escalation_id: str, escalation: dict):
+    """Generate insights and update escalation record, then notify frontend."""
+    logger.info(f"🎯 [INSIGHTS] Task started for escalation {escalation_id}")
+    
+    try:
+        insights = await generate_decision_insights(escalation)
+        
+        logger.info(f"🔄 [INSIGHTS] Checking if escalation {escalation_id} still exists...")
+        if escalation_id not in escalations:
+            logger.warning(f"⚠️ [INSIGHTS] Escalation {escalation_id} no longer exists - skipping update")
+            return
+        
+        if insights:
+            escalations[escalation_id]["ai_insights"] = insights
+            escalations[escalation_id]["insights_generated_at"] = datetime.now().isoformat()
+            
+            logger.info(f"💡 [INSIGHTS] Updated escalation {escalation_id} with insights")
+            logger.info(f"📊 [INSIGHTS] Frontend WebSocket connections: {len(frontend_websockets)}")
+            
+            # Notify frontend that insights are available
+            message = {
+                "type": "insights_updated",
+                "escalation_id": escalation_id,
+                "escalation": escalations[escalation_id]
+            }
+            logger.info(f"📤 [INSIGHTS] Broadcasting insights update for {escalation_id} to {len(frontend_websockets)} frontend clients")
+            await broadcast_to_frontend(message)
+            logger.info(f"✅ [INSIGHTS] Successfully broadcasted insights for {escalation_id}")
+        else:
+            logger.warning(f"⚠️ [INSIGHTS] No insights generated for {escalation_id} - not updating")
+            
+    except Exception as e:
+        logger.error(f"❌ [INSIGHTS] Error in generate_and_update_insights for {escalation_id}: {e}", exc_info=True)
+        import traceback
+        logger.error(f"📚 [INSIGHTS] Traceback: {traceback.format_exc()}")
 
 @app.get("/api/escalations/pending")
 async def get_pending_escalations():
@@ -201,18 +348,29 @@ async def delete_escalation(escalation_id: str):
 async def broadcast_to_frontend(message: dict):
     """Broadcast a message to all connected frontend clients."""
     if not frontend_websockets:
+        logger.warning(f"⚠️ [BROADCAST] No frontend WebSocket connections available")
         return
     
+    message_type = message.get("type", "unknown")
+    logger.info(f"📡 [BROADCAST] Broadcasting {message_type} to {len(frontend_websockets)} frontend clients")
+    
     disconnected = set()
+    success_count = 0
     for ws in frontend_websockets:
         try:
             await ws.send_json(message)
+            success_count += 1
+            logger.debug(f"✅ [BROADCAST] Sent {message_type} to frontend client")
         except Exception as e:
-            logger.warning(f"Failed to send to frontend client: {e}")
+            logger.warning(f"❌ [BROADCAST] Failed to send {message_type} to frontend client: {e}")
             disconnected.add(ws)
     
     # Remove disconnected clients
-    frontend_websockets.difference_update(disconnected)
+    if disconnected:
+        frontend_websockets.difference_update(disconnected)
+        logger.info(f"🧹 [BROADCAST] Removed {len(disconnected)} disconnected clients")
+    
+    logger.info(f"📊 [BROADCAST] Successfully sent {message_type} to {success_count}/{len(frontend_websockets) + len(disconnected)} clients")
 
 @app.websocket("/ws/agent/{escalation_id}")
 async def agent_websocket_endpoint(websocket: WebSocket, escalation_id: str):
@@ -345,6 +503,9 @@ if __name__ == "__main__":
     logger.info(f"LIVEKIT_URL: {os.getenv('LIVEKIT_URL', 'ws://localhost:7880')}")
     logger.info(f"LIVEKIT_API_KEY: {'✅ SET' if os.getenv('LIVEKIT_API_KEY') else '❌ NOT SET'}")
     logger.info(f"LIVEKIT_API_SECRET: {'✅ SET' if os.getenv('LIVEKIT_API_SECRET') else '❌ NOT SET'}")
+    logger.info(f"ANTHROPIC_API_KEY: {'✅ SET' if os.getenv('ANTHROPIC_API_KEY') else '❌ NOT SET'}")
+    logger.info(f"CLAUDE_API_KEY: {'✅ SET' if os.getenv('CLAUDE_API_KEY') else '❌ NOT SET'}")
+    logger.info(f"Claude Client Status: {'✅ INITIALIZED' if claude_client else '❌ NOT INITIALIZED'}")
     logger.info("===========================")
     
     uvicorn.run(

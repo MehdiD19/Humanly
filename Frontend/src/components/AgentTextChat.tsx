@@ -61,7 +61,7 @@ function AgentTextChat({ isVisible, onToggle }: AgentTextChatProps) {
       text: msg.message,
       isFromAgent,
       timestamp,
-      sender: isFromAgent ? 'Agent' : 'You'
+      sender: isFromAgent ? 'Humanly' : 'You'
     }
   }
 
@@ -98,7 +98,7 @@ function AgentTextChat({ isVisible, onToggle }: AgentTextChatProps) {
             <div className="chat-header">
               <div className="chat-header-info">
                 <MessageSquare size={18} />
-                <span>Text Chat</span>
+                <span>Conversation</span>
               </div>
               <button 
                 onClick={onToggle}
@@ -113,7 +113,7 @@ function AgentTextChat({ isVisible, onToggle }: AgentTextChatProps) {
                 {formattedMessages.length === 0 ? (
                   <div className="empty-chat">
                     <MessageSquare size={32} />
-                    <p>Start typing to chat with the agent!</p>
+                    <p>Start typing to chat with your Digital Twin</p>
                     <small>Your messages will be sent alongside voice input.</small>
                   </div>
                 ) : (
